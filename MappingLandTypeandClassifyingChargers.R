@@ -38,6 +38,7 @@ ggplot()+
   ) + 
   labs(title = "New Jersey Urban and Rural Areas") +
   theme_minimal()
+ggsave("New Jersey Urban and Rural Areas.png")
   
 #or
 plot(st_geometry(nj), col = "white", border = "black")

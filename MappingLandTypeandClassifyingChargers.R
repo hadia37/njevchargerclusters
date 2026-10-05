@@ -64,4 +64,4 @@ urban_rural <- urban_rural |>
 #Convert charger dataset to sf before spatial join
 chargers_sf <- st_as_sf(ev_stations, coords = c("Longitude", "Latitude"), crs=4326)
 chargers <- st_join(chargers_sf, urban_rural)
-
+st_write(chargers, "EVChargersClassified.shp")

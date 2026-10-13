@@ -23,6 +23,16 @@ gas <- st_join(gas, urban_rural)
 #Create travel distance matrix for gas stations
 nj_osm <- oe_get("New Jersey", layer = "lines")
 graph <- weight_streetnet(nj_osm)
+if (file.exists("nj_graph.rds")) {
+  graph <- readRDS("nj_graph.rds")
+} else {
+  nj_osm <- oe_get_network(
+    place = "New Jersey",
+    mode = "driving"
+  )
+  graph <- weight_streetnet(nj_osm)
+  saveRDS(graph, "nj_graph.rds")
+}
 
 gas_df <- gas %>%
   mutate(lon=st_coordinates(.)[,1],
@@ -51,16 +61,19 @@ chargers_df <- chargers %>%
          lat = charger_coords[,2]) %>% 
   st_drop_geometry() 
 
-travelmatrix <- osrmTable(src = chargers_df[, c("lon", "lat")], 
-                dst = chargers_df[, c("lon", "lat")]) 
+dist_matrix2 <- dodgr=dists(graph, from = chargers_df, to = chargers_df)
+chargers$nn_dist_m <- apply(dist_matrix2 + diag(Inf, nrow(dist_matrix2)), 1, min)
 
-chargers$nearest_dist_min <- apply(travelmatrix$durations, 1, min) 
+#travelmatrix <- osrmTable(src = chargers_df[, c("lon", "lat")], 
+                #dst = chargers_df[, c("lon", "lat")]) 
+#chargers$nearest_dist_min <- apply(travelmatrix$durations, 1, min) 
 
+#Classify gap areas
 chargers <- chargers %>% 
   mutate( 
     gap_flag = case_when( 
-      urban_rural == "rural" & nearest_time_min > rural_time_threshold ~ TRUE, 
-      urban_rural == "urban" & nearest_time_min > urban_time_threshold ~ TRUE, 
+      urban_rural == "rural" & nn_dist_m > rural_dist_threshold ~ TRUE, 
+      urban_rural == "urban" & nn_dist_m > urban_dist_threshold ~ TRUE, 
       TRUE ~ FALSE 
     ) 
   ) 

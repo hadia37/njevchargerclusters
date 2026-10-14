@@ -65,11 +65,11 @@ ggplot()+
     values = c("Urban" = "grey60", "Rural" = "lightgreen"),
     name = "Area Type"
   ) + 
-  geom_sf(data = chargers_sf, aes(color = level), size = 1) +
-  scale_color_manual(
-    values = c("L2" = "deepskyblue", "DCFC" = "darkorchid"),
-    name = "Charger Level"
-  ) +
+  #geom_sf(data = chargers_sf, aes(color = level), size = 1) +
+  #scale_color_manual(
+    #values = c("L2" = "deepskyblue", "DCFC" = "darkorchid"),
+    #name = "Charger Level"
+  #) +
   labs(title = "New Jersey EV Chargers in Urban and Rural Areas") +
     theme_minimal()
 #ggsave("New Jersey EV Chargers in Urban and Rural Areas.png")
@@ -125,11 +125,22 @@ ggsave("New Jersey Urban DCFC Chargers.png")
 
 #Identifying rural vs urban municipalities
 municipalities <- st_read("NJ_municipalities_3857.shp")
-municipalities <- st_transform(municipalities, st_crs(rural_nj))
+municipalities <- st_transform(municipalities, st_crs(urban_union))
 municipalities <- st_make_valid(municipalities)
 
 ruralmunis <- st_intersection(municipalities, rural_nj)
-muni_list <- unique(ruralmunis$MUN)
-print(muni_list)
-print(length(muni_list))
+muni_pop_table <- ruralmunis %>%
+  st_drop_geometry() %>% 
+  select(MUN, POP2020) %>% 
+  distinct(MUN, .keep_all = TRUE) %>% 
+  arrange(MUN)
+
+urbanmunis <- st_intersection(municipalities, urban_union)
+muni_pop_table2 <- urbanmunis %>%
+  st_drop_geometry() %>% 
+  select(MUN, POP2020) %>% 
+  distinct(MUN, .keep_all = TRUE) %>% 
+  arrange(MUN)
+
 write_sf(ruralmunis, "Rural Municipalities.shp")
+write_sf(urbanmunis, "Urban Municipalities.shp")

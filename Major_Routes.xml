@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?><metadata>
+    <idinfo>
+        <citation>
+            <citeinfo>
+                <origin/>
+                <pubdate>20240515</pubdate>
+                <title>NJDOT Roadway Network</title>
+                <onlink>https://services.arcgis.com/HggmsDF7UJsNN1FK/arcgis/rest/services/NJDOT_Roadway_Network/FeatureServer</onlink>
+            </citeinfo>
+        </citation>
+        <descript>
+            <abstract>The New Jersey Department of Transportation (NJDOT) 2023 Straight Line Diagrams (SLDs) are a way to view roadways in a line format. The SLD network presents approximately 12,528 miles of State (Interstate, US and NJ numbered roads), National Highway System (NHS), Surface Transportation Program (STP) and all County routes.</abstract>
+            <purpose>The New Jersey Department of Transportation (NJDOT) 2023 Straight Line Diagrams (SLDs) are a way to view roadways in a line format. The SLD network presents approximately 12,528 miles of State (Interstate, US and NJ numbered roads), National Highway System (NHS), Surface Transportation Program (STP) and all County routes.</purpose>
+        </descript>
+        <status>
+            <update>As needed</update>
+        </status>
+        <spdom>
+            <bounding>
+                <westbc>-75.823656</westbc>
+                <eastbc>-73.750196</eastbc>
+                <northbc>41.520656</northbc>
+                <southbc>38.854282</southbc>
+            </bounding>
+        </spdom>
+        <keywords>
+            <theme>
+                <themekt>None</themekt>
+                <themekey>sld</themekey>
+                <themekey>straight line diagram</themekey>
+            </theme>
+            <theme>
+                <themekt>ISO 19115 Topic Categories</themekt>
+                <themekey>transportation</themekey>
+            </theme>
+        </keywords>
+        <accconst>None</accconst>
+        <useconst>None</useconst>
+    </idinfo>
+    <metainfo>
+        <metc>
+            <cntinfo>
+                <cntorgp>
+                    <cntorg>NJ Dept of Transportation</cntorg>
+                </cntorgp>
+                <cntaddr>
+                    <addrtype>mailing</addrtype>
+                    <city>Ewing</city>
+                    <state>New Jersey</state>
+                    <postal>08625</postal>
+                </cntaddr>
+            </cntinfo>
+        </metc>
+        <metstdn>FGDC Content Standard for Digital Geospatial Metadata</metstdn>
+        <metstdv>FGDC-STD-001-1998</metstdv>
+        <mettc>local time</mettc>
+    </metainfo>
+</metadata>

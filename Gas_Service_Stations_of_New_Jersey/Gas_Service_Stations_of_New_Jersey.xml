@@ -1,0 +1,928 @@
+<?xml version="1.0" encoding="UTF-8"?><metadata>
+    <idinfo>
+        <citation>
+            <citeinfo>
+                <origin/>
+                <pubdate>20250921</pubdate>
+                <title>Gas Service Stations in NJ (Envr_NJEMS_gasstation) (Web Mercator ArcGIS Online Service)</title>
+                <geoform>vector digital data</geoform>
+                <pubinfo>
+                    <pubplace/>
+                    <publish>NJ Department of Environmental Protection (NJDEP)</publish>
+                </pubinfo>
+                <onlink>https://www.nj.gov/dep/gis/digidownload/zips/OpenData/Envr_NJEMS_gasstation.zip</onlink>
+            </citeinfo>
+        </citation>
+        <descript>
+            <abstract>Note: This dataset is updated weekly. Gas Service Stations are points representing the locations of gasoline services stations regulated by NJDEP. The NJDEP New Jersey Environmental Management System (NJEMS) serves as the database that supplies coordinates and descriptive attributes from several tables used to generate this GIS layer. This layer is produced primarily for the NJDEP i-MapNJ ArcIMS interactive mapping web application and ArcGIS (ArcView, ArcInfo) users. Program interests included in NJEMS are: Air, Communications Center, Discharge Prevention, Exams and Licensing, Fish Game and Wildlife, Green Acres, Hazardous Waste, Lab Certification, Land Use, Landscape Irrigation, Parks and Forestry, Pesticides, Pinelands, Planning, Radiation, Right-to-Know, Site Remediation, Soil Conservation, Solid Waste, TCPA, Water Quality, Water Supply, and Watershed Management. The locations derived using GPS represent main entrance or front door locations for the sites. Users should note that not every site in NJEMS presently (as of February 2009) has an established coordinate (GPS or otherwise). NJDEP is continually working to acquire these with GPS, location data submitted to permitting programs, and through address matching techniques.</abstract>
+            <purpose>This data was designed to support the NJGeoWeb interactive mapping application, to enable NJEMS and non-NJEMS users alike to view the locations of gasoline service stations in relation to each other and other features from GIS data layers. The layer by itself only contains general information about the sites - name, location, coordinate, how the coordinate was captured, and the site's unique identifier.</purpose>
+            <supplinf>The gasoline service stations locations were determined in a number of ways. Approximately 83% were captured using code-based differential GPS with a typical accuracy of 1-5 meters. The vast majority of the GPS data collected was done with the Trimble Navigation Pathfinder series (Basic Plus, Pro, Pro XL, and Pro XR) and was processed using Trimble Navigation PFINDER and Pathfinder Office software. Approximately 8% of the locations were address matched against TIGER2000 roads and a streets layers developed by Tele Atlas. The remaining 9% were determined using digital orthophotos, data from legacy NJDEP databases, hardcopy maps, or are of unknown origin. The coordinate data from NJEMS was used to first make an SDE feature class. The attribute data was culled from several NJEMS tables into an Oracle view, which was then used to create a table that was then joined to the feature class, using SITE_ID as the join field.</supplinf>
+        </descript>
+        <status>
+            <progress>Complete</progress>
+            <update>Continually</update>
+        </status>
+        <spdom>
+            <bounding>
+                <westbc>-75.569436</westbc>
+                <eastbc>-73.922166</eastbc>
+                <northbc>41.351611</northbc>
+                <southbc>38.931447</southbc>
+            </bounding>
+        </spdom>
+        <keywords>
+            <theme>
+                <themekt>User</themekt>
+                <themekey>Envr_NJEMS_gasstation</themekey>
+                <themekey>gasstations</themekey>
+            </theme>
+            <theme>
+                <themekt>None</themekt>
+                <themekey>gasoline</themekey>
+                <themekey>NJEMS</themekey>
+                <themekey>sites</themekey>
+                <themekey>regulated facilities</themekey>
+                <themekey>regulated sites</themekey>
+                <themekey>service station</themekey>
+                <themekey>gas station</themekey>
+                <themekey>facilities</themekey>
+                <themekey>gas</themekey>
+            </theme>
+            <place>
+                <placekt>None</placekt>
+                <placekey>Burlington County</placekey>
+                <placekey>Somerset County</placekey>
+                <placekey>Salem County</placekey>
+                <placekey>Sussex County</placekey>
+                <placekey>Union County</placekey>
+                <placekey>New Jersey</placekey>
+                <placekey>Gloucester County</placekey>
+                <placekey>Atlantic County</placekey>
+                <placekey>Essex County</placekey>
+                <placekey>Morris County</placekey>
+                <placekey>Monmouth County</placekey>
+                <placekey>Warren County</placekey>
+                <placekey>Cape May County</placekey>
+                <placekey>Passaic County</placekey>
+                <placekey>Ocean County</placekey>
+                <placekey>Hunterdon County</placekey>
+                <placekey>Hudson County</placekey>
+                <placekey>Cumberland County</placekey>
+                <placekey>Bergen County</placekey>
+                <placekey>Middlesex County</placekey>
+                <placekey>Camden County</placekey>
+                <placekey>Mercer County</placekey>
+            </place>
+        </keywords>
+        <accconst>In most cases, a downloadable shapefile (.zip) version of this layer is also available. Information to download the shapefile can be found in the Distribution Section of this metadata record. This data layer is shown in the NJDEP's NJ-GeoWeb mapping application accessable through the Online Linkage: https://www.nj.gov/dep/gis/geowebsplash.htm</accconst>
+        <useconst>New Jersey Department of Environmental Protection (NJDEP) Data Distribution Agreement. The data provided herein are distributed subject to the following conditions and restrictions: NJDEP assumes no responsibility to maintain them in any manner or form and disclaims any duty or obligation to either maintain availability of or to update the data. Terms of Agreement 1. All data is provided, as is, without any representation or warranty of any kind, implied, expressed or statutory including, but not limited to, the warranties of non-infringement of third party rights, title, merchantability or fitness for a particular use, freedom from computer virus nor are any such warranties to be implied with respect to the digital data layers furnished hereunder. User is responsible for understanding the accuracy limitations of all digital data layers provided herein, as documented in the accompanying cross-reference files (see SUPPLEMENTAL INFORMATION). Any reproduction or manipulation of the above data must ensure that the coordinate reference system remains intact. 2. Digital data received from the NJDEP may not be reproduced or redistributed without all the metadata provided. 3. Any maps, publications, reports, or other documents produced as a result of this project that utilize this digital data will credit the NJDEP's Geographic Information System (GIS) as the source of the data with the following credit/disclaimer: "This (map/publication/report) was developed using New Jersey Department of Environmental Protection Geographic Information System digital data, but this secondary product has not been verified by NJDEP and is not state-authorized or endorsed." 4. NJDEP makes no warranty that digital data are free of Copyright or Trademark claims or other restrictions or limitations on free use or display. Making a copy of this data may be subject to the copyright of trademark laws.</useconst>
+        <ptcontac>
+            <cntinfo>
+                <cntorgp>
+                    <cntorg>NJDEP/DOIT/BGIS</cntorg>
+                    <cntper>Lou Jacoby</cntper>
+                </cntorgp>
+                <cntpos>GIS Specialist</cntpos>
+                <cntaddr>
+                    <addrtype>mailing and physical</addrtype>
+                    <address>401 East State Street</address>
+                    <address>PO Box 428</address>
+                    <city>Trenton</city>
+                    <state>NJ</state>
+                    <postal>08625</postal>
+                </cntaddr>
+                <cntvoice>(609) 777-0672</cntvoice>
+                <cntfax>(609) 292-7900</cntfax>
+                <cntemail>gisnet@dep.nj.gov</cntemail>
+            </cntinfo>
+        </ptcontac>
+        <browse>
+            <browsen>withheld</browsen>
+            <browsed>image</browsed>
+            <browset>GIF</browset>
+        </browse>
+        <native>ESRI ArcCatalog 9.3.1.3500</native>
+    </idinfo>
+    <dataqual>
+        <attracc>
+            <attraccr>Attribute data associated with the NJEMS site locations comes directly from the NJEMS database. Site IDs associated with coordinates were checked with the site IDs in NJEMS before loading site coordinates into NJEMS.</attraccr>
+        </attracc>
+        <logic>Coordinates from NJEMS were generated and the state municipality and zip code layers were used as overlays to check that there was consistency between the county, municipality, and ZIP code values for the NJEMS sites. Where discrepancies turned up, these sites were investigated and either fixed or discarded. Most of the location in error came from submittal documents and program databases.</logic>
+        <complete>There are site records within the NJEMS database that do not have location coordinates derived from GPS, address-matching, or otherwise. As of June 2009, there were 267,561 physical site records in NJEMS. The NJEMSSITE layer contains 165,551 of these, which leaves 102,010 sites that are not represented. Some of the missing sites may include gas station facilities. Complicating matters is that new program site records are still being added to NJEMS, increasing the universe of sites. Often these need to be fixed due to coordinate entry errors. Plans are to GPS sites when possible, and also research site addresses that were not matched.</complete>
+        <posacc>
+            <horizpa>
+                <horizpar>The horizontal accuracy of the GPS derived site locations is typically 1-5 meters. This was verified using digital orthophotography. The horizontal accuracy of the locations derived from 1995-97 and 2002 orthophoto images is typically within 20 feet. The horizontal accuracy of the address-matched locations is probably within 1,000 feet. The address-match accuracy is very much dependent on the GDT and TIGER2000 roads GIS layers. The spatial accuracy of the road arcs, as well as the address coding ranges associated with each road arc are key factors in accuracy of the points matched to the arcs.</horizpar>
+            </horizpa>
+        </posacc>
+        <posacc>
+            <vertacc>
+                <vertaccr>There is no vertical locational component in the Gasoline Service Stations GIS layer.</vertaccr>
+            </vertacc>
+        </posacc>
+        <lineage>
+            <srcinfo>
+                <srccite>
+                    <citeinfo>
+                        <origin/>
+                        <pubdate>20060824</pubdate>
+                        <title>Gasoline Service Stations</title>
+                        <geoform>vector digital data</geoform>
+                        <pubinfo>
+                            <pubplace/>
+                            <publish>NJDEP</publish>
+                        </pubinfo>
+                        <othercit>none</othercit>
+                    </citeinfo>
+                </srccite>
+                <srcscale>12000</srcscale>
+                <typesrc>onLine</typesrc>
+                <srctime>
+                    <timeinfo>
+                        <sngdate>
+                            <caldate>20090201</caldate>
+                            <time>unknown</time>
+                        </sngdate>
+                    </timeinfo>
+                    <srccurr>ground condition</srccurr>
+                </srctime>
+                <srccitea>NJEMS</srccitea>
+                <srccontr>Site location coordinates and basic site information were supplied from several NJEMS tables including CORE_SITE, CORE_SITE_NAME, CORE_ADDR, CMTB_COUNTY_MUNICIPALITY_XREF, CMTB_COORD_SYSTEM, CMTB_COORD_SOURCE_ORG, and CMTB_COORD_SOURCE_TYPE.</srccontr>
+            </srcinfo>
+            <procstep>
+                <procdesc>Data updated</procdesc>
+            </procstep>
+            <procstep>
+                <procdesc>Data is updated on a continuous basis. GPS coordinate locations for NJEMS sites were collected beginning in 1993. The GPS data was processed (including differential correction) and the resulting site coordinates were passed on to NJDEP DOIT staff who loaded the coordinates into the NJEMS Site Masterfile database. NJDEP permitting staff also entered coordinate data for sites without already existing GPS coordinate values. Address-matched coordinates were generated for sites without coordinates in July and September 2004, using TIGER and GDT roads. The default matching options were selected, including spelling sensitivity: 80, minimum candidate score: 10, minimum match score: 60. NJEMS site records associated with gasoline service stations were exported to an Excel spreadsheet which was later reformatted to a .dbf file. This was then joined to the NJEMS sites layer in ArcMap. Once the join was done, the NJEMS sites records that made a successful join to the gasoline service stations table, were exported into the new gasoline service stations layer.</procdesc>
+                <procdate>unknown</procdate>
+            </procstep>
+        </lineage>
+    </dataqual>
+    <spdoinfo>
+        <direct>Vector</direct>
+    </spdoinfo>
+    <eainfo>
+        <detailed>
+            <enttyp>
+                <enttypl>gasstations</enttypl>
+                <enttypd>Gasoline Service Stations</enttypd>
+                <enttypds>NJDEP</enttypds>
+            </enttyp>
+            <attr>
+                <attrlabl>OBJECTID</attrlabl>
+                <attrdef>Internal feature number.</attrdef>
+                <attrdefs>ESRI</attrdefs>
+                <attrdomv>
+                                        					
+                    
+                    <udom>Sequential unique whole numbers that are automatically generated.</udom>
+                                        				
+                
+                </attrdomv>
+            </attr>
+            <attr>
+                <attrlabl>SITE_ID</attrlabl>
+                <attrdef>The unique site identifier in the NJEMS database.</attrdef>
+                <attrdefs>NJDEP</attrdefs>
+                <attrdomv>
+                                        					
+                    
+                    <udom>Unique whole number</udom>
+                                        				
+                
+                </attrdomv>
+            </attr>
+            <attr>
+                <attrlabl>SITE_NAME</attrlabl>
+                <attrdef>Name of the site as stored in the NJEMS database.</attrdef>
+                <attrdefs>NJDEP</attrdefs>
+                <attrdomv>
+                                        					
+                    
+                    <udom>Unique site name</udom>
+                                        				
+                
+                </attrdomv>
+            </attr>
+            <attr>
+                <attrlabl>ADDRESS_LINE_1</attrlabl>
+                <attrdef>Address location or Alternate Address</attrdef>
+                <attrdefs>NJDEP</attrdefs>
+                <attrdomv>
+                                        					
+                    
+                    <udom>Unique</udom>
+                                        				
+                
+                </attrdomv>
+            </attr>
+            <attr>
+                <attrlabl>ADDRESS_LINE_2</attrlabl>
+                <attrdef>Address location or Alternate Address</attrdef>
+                <attrdefs>NJDEP</attrdefs>
+                <attrdomv>
+                                        					
+                    
+                    <udom>Unique</udom>
+                                        				
+                
+                </attrdomv>
+            </attr>
+            <attr>
+                <attrlabl>ADDRESS_LINE_3</attrlabl>
+                <attrdef>Address location or Alternate Address</attrdef>
+                <attrdefs>NJDEP</attrdefs>
+                <attrdomv>
+                                        					
+                    
+                    <udom>Unique</udom>
+                                        				
+                
+                </attrdomv>
+            </attr>
+            <attr>
+                <attrlabl>CITY</attrlabl>
+                <attrdef>The city or town in which the site is located</attrdef>
+                <attrdefs>NJDEP</attrdefs>
+                <attrdomv>
+                                        					
+                    
+                    <udom>The cities and towns of NJ</udom>
+                                        				
+                
+                </attrdomv>
+            </attr>
+            <attr>
+                <attrlabl>STATE_OR_COUNTRY_CODE</attrlabl>
+                <attrdef>State or Country Code entry</attrdef>
+                <attrdefs>NJDEP</attrdefs>
+                <attrdomv>
+                                        					
+                    
+                    <udom>Unique</udom>
+                                        				
+                
+                </attrdomv>
+            </attr>
+            <attr>
+                <attrlabl>ZIP_CODE</attrlabl>
+                <attrdef>The ZIP code zone in which the site is located</attrdef>
+                <attrdefs>NJDEP</attrdefs>
+                <attrdomv>
+                                        					
+                    
+                    <codesetd>
+                                                						
+                        
+                        <codesetn>Federal Zip Code List</codesetn>
+                                                						
+                        
+                        <codesets>US Postal Service</codesets>
+                                                					
+                    
+                    </codesetd>
+                                        				
+                
+                </attrdomv>
+            </attr>
+            <attr>
+                <attrlabl>COUNTY</attrlabl>
+                <attrdef>County Name</attrdef>
+                <attrdefs>NJDEP</attrdefs>
+                <attrdomv>
+                                        					
+                    
+                    <udom>Unique</udom>
+                                        				
+                
+                </attrdomv>
+            </attr>
+            <attr>
+                <attrlabl>MUNICIPALITY</attrlabl>
+                <attrdef>Municipality Name</attrdef>
+                <attrdefs>NJDEP</attrdefs>
+                <attrdomv>
+                                        					
+                    
+                    <udom>Unique</udom>
+                                        				
+                
+                </attrdomv>
+            </attr>
+            <attr>
+                <attrlabl>X_COORD_NUM</attrlabl>
+                <attrdef>X coordinate value</attrdef>
+                <attrdefs>NJDEP</attrdefs>
+                <attrdomv>
+                                        					
+                    
+                    <udom>Unique</udom>
+                                        				
+                
+                </attrdomv>
+            </attr>
+            <attr>
+                <attrlabl>Y_COORD_NUM</attrlabl>
+                <attrdef>Y coordinate value</attrdef>
+                <attrdefs>NJDEP</attrdefs>
+                <attrdomv>
+                                        					
+                    
+                    <udom>Unique</udom>
+                                        				
+                
+                </attrdomv>
+            </attr>
+            <attr>
+                <attrlabl>COORD_SYS</attrlabl>
+                <attrdef>The site coordinate's coordinate system.</attrdef>
+                <attrdefs>NJDEP</attrdefs>
+                <attrdomv>
+                                        					
+                    
+                    <edom>
+                                                						
+                        
+                        <edomv>NEW JERSEY STATE PLANE 83 - USFEET</edomv>
+                                                						
+                        
+                        <edomvd>New Jersey State Plane Coordinate System, North American Datum 1983, US survey feet units</edomvd>
+                                                						
+                        
+                        <edomvds>NJDEP</edomvds>
+                                                					
+                    
+                    </edom>
+                                        				
+                
+                </attrdomv>
+            </attr>
+            <attr>
+                <attrlabl>COORD_TYPE</attrlabl>
+                <attrdef>How the site's coordinate location was determined.</attrdef>
+                <attrdefs>NJDEP</attrdefs>
+                <attrdomv>
+                                        					
+                    
+                    <edom>
+                                                						
+                        
+                        <edomv>GPS</edomv>
+                                                						
+                        
+                        <edomvd>The site coordinate was captured using code-based differential GPS.</edomvd>
+                                                						
+                        
+                        <edomvds>NJDEP</edomvds>
+                                                					
+                    
+                    </edom>
+                                        				
+                
+                </attrdomv>
+                <attrdomv>
+                                        					
+                    
+                    <edom>
+                                                						
+                        
+                        <edomv>DEP Program Database</edomv>
+                                                						
+                        
+                        <edomvd>The site coordinate was obtained from a NJDEP program database (pre-NJEMS).</edomvd>
+                                                						
+                        
+                        <edomvds>NJDEP</edomvds>
+                                                					
+                    
+                    </edom>
+                                        				
+                
+                </attrdomv>
+                <attrdomv>
+                                        					
+                    
+                    <edom>
+                                                						
+                        
+                        <edomv>Exact Address Match</edomv>
+                                                						
+                        
+                        <edomvd>The site coordinate was generated through an address matching process. In this instance the match was made to the address number and street.</edomvd>
+                                                						
+                        
+                        <edomvds>NJDEP</edomvds>
+                                                					
+                    
+                    </edom>
+                                        				
+                
+                </attrdomv>
+                <attrdomv>
+                                        					
+                    
+                    <edom>
+                                                						
+                        
+                        <edomv>Digital Image</edomv>
+                                                						
+                        
+                        <edomvd>The site coordinate was determined with the aid of a digital orthophoto image, either the 1995-97 or 2002 image series.</edomvd>
+                                                						
+                        
+                        <edomvds>NJDEP</edomvds>
+                                                					
+                    
+                    </edom>
+                                        				
+                
+                </attrdomv>
+                <attrdomv>
+                                        					
+                    
+                    <edom>
+                                                						
+                        
+                        <edomv>Hard Copy Map</edomv>
+                                                						
+                        
+                        <edomvd>The coordinate was determined with the aid of a hard copy map of undocumented scale or projection.</edomvd>
+                                                						
+                        
+                        <edomvds>NJDEP</edomvds>
+                                                					
+                    
+                    </edom>
+                                        				
+                
+                </attrdomv>
+                <attrdomv>
+                                        					
+                    
+                    <edom>
+                                                						
+                        
+                        <edomv>Other/Unknown</edomv>
+                                                						
+                        
+                        <edomvd>The method in which the coordinates were captured is other or unknown.</edomvd>
+                                                						
+                        
+                        <edomvds>NJDEP</edomvds>
+                                                					
+                    
+                    </edom>
+                                        				
+                
+                </attrdomv>
+                <attrdomv>
+                                        					
+                    
+                    <edom>
+                                                						
+                        
+                        <edomv>Approx. Addr. Match</edomv>
+                                                						
+                        
+                        <edomvd>The site coordinate was generated through an address matching process. In this instance the match was made to a location somewhere on the street - the location could not be further clarified.</edomvd>
+                                                						
+                        
+                        <edomvds>NJDEP</edomvds>
+                                                					
+                    
+                    </edom>
+                                        				
+                
+                </attrdomv>
+            </attr>
+            <attr>
+                <attrlabl>COORD_ORIGIN</attrlabl>
+                <attrdef>Origin of Coordinate value</attrdef>
+                <attrdefs>NJDEP</attrdefs>
+                <attrdomv>
+                                        					
+                    
+                    <edom>
+                                                						
+                        
+                        <edomv>DEP-GIS</edomv>
+                                                						
+                        
+                        <edomvd>The site coordinate was generated by NJDEP's Bureau of GIS.</edomvd>
+                                                						
+                        
+                        <edomvds>NJDEP</edomvds>
+                                                					
+                    
+                    </edom>
+                                        				
+                
+                </attrdomv>
+                <attrdomv>
+                                        					
+                    
+                    <edom>
+                                                						
+                        
+                        <edomv>DEP-Program</edomv>
+                                                						
+                        
+                        <edomvd>The site coordinate was obtained from NJDEP program, most likely from a legacy pre-NJEMS environmental database.</edomvd>
+                                                						
+                        
+                        <edomvds>NJDEP</edomvds>
+                                                					
+                    
+                    </edom>
+                                        				
+                
+                </attrdomv>
+                <attrdomv>
+                                        					
+                    
+                    <edom>
+                                                						
+                        
+                        <edomv>Submittal Document</edomv>
+                                                						
+                        
+                        <edomvd>The site coordinate was obtained from a document submitted to NJDEP, most likely a permit.</edomvd>
+                                                						
+                        
+                        <edomvds>NJDEP</edomvds>
+                                                					
+                    
+                    </edom>
+                                        				
+                
+                </attrdomv>
+                <attrdomv>
+                                        					
+                    
+                    <edom>
+                                                						
+                        
+                        <edomv>EPA</edomv>
+                                                						
+                        
+                        <edomvd>The site coordinate was obtained from the US Environmental Protection Agency.</edomvd>
+                                                						
+                        
+                        <edomvds>NJDEP</edomvds>
+                                                					
+                    
+                    </edom>
+                                        				
+                
+                </attrdomv>
+                <attrdomv>
+                                        					
+                    
+                    <edom>
+                                                						
+                        
+                        <edomv>County</edomv>
+                                                						
+                        
+                        <edomvd>The site coordinate was obtained from a NJ county agency, most likely a county health department or planning office.</edomvd>
+                                                						
+                        
+                        <edomvds>NJDEP</edomvds>
+                                                					
+                    
+                    </edom>
+                                        				
+                
+                </attrdomv>
+                <attrdomv>
+                                        					
+                    
+                    <edom>
+                                                						
+                        
+                        <edomv>Other/Unknown</edomv>
+                                                						
+                        
+                        <edomvd>The site coordinate is of unknown origin.</edomvd>
+                                                						
+                        
+                        <edomvds>NJDEP</edomvds>
+                                                					
+                    
+                    </edom>
+                                        				
+                
+                </attrdomv>
+                <attrdomv>
+                                        					
+                    
+                    <edom>
+                                                						
+                        
+                        <edomv>Address Match</edomv>
+                                                						
+                        
+                        <edomvd>The site coordinate was derived from an address matching process using either TIGER2000 or GDT road bases.</edomvd>
+                                                						
+                        
+                        <edomvds>NJDEP</edomvds>
+                                                					
+                    
+                    </edom>
+                                        				
+                
+                </attrdomv>
+            </attr>
+            <attr>
+                <attrlabl>MUN</attrlabl>
+                <attrdef>Municipality name</attrdef>
+                <attrdefs>Federal</attrdefs>
+                <attrdomv>
+                                        					
+                    
+                    <udom>unique name</udom>
+                                        				
+                
+                </attrdomv>
+            </attr>
+            <attr>
+                <attrlabl>GNIS</attrlabl>
+                <attrdef>GNIS civil code for municipality</attrdef>
+                <attrdefs>Bureau of Geographic Names - United States Geological Survey</attrdefs>
+                <attrdomv>
+                                        					
+                    
+                    <codesetd>
+                                                						
+                        
+                        <codesetn>GNIS civil code</codesetn>
+                                                						
+                        
+                        <codesets>Bureau of Geographic Names - United States Geological Survey</codesets>
+                                                					
+                    
+                    </codesetd>
+                                        				
+                
+                </attrdomv>
+            </attr>
+            <attr>
+                <attrlabl>SSN</attrlabl>
+                <attrdef>State Standard Numeric</attrdef>
+                <attrdefs>Federal</attrdefs>
+                <attrdomv>
+                                        					
+                    
+                    <codesetd>
+                                                						
+                        
+                        <codesetn>State Standard Numeric (SSN)</codesetn>
+                                                						
+                        
+                        <codesets>Federal</codesets>
+                                                					
+                    
+                    </codesetd>
+                                        				
+                
+                </attrdomv>
+            </attr>
+            <attr>
+                <attrlabl>MUN_CODE</attrlabl>
+                <attrdef>Municipal code (NJ-1040)</attrdef>
+                <attrdefs>New Jersey Department of Treasury</attrdefs>
+                <attrdomv>
+                                        					
+                    
+                    <codesetd>
+                                                						
+                        
+                        <codesetn>Municipal code (NJ-1040)</codesetn>
+                                                						
+                        
+                        <codesets>New Jersey Department of Treasury</codesets>
+                                                					
+                    
+                    </codesetd>
+                                        				
+                
+                </attrdomv>
+            </attr>
+            <attr>
+                <attrlabl>KEY</attrlabl>
+                <attrdef>Unique feature number for Municipality</attrdef>
+                <attrdefs>Federal</attrdefs>
+                <attrdomv>
+                                        					
+                    
+                    <udom>Unique Key numbers to represent municipality</udom>
+                                        				
+                
+                </attrdomv>
+            </attr>
+            <attr>
+                <attrlabl>HUC11</attrlabl>
+                <attrdef>Eleven Digit Hydrologic Unit Code</attrdef>
+                <attrdefs>NJDEP</attrdefs>
+                <attrdomv>
+                                        					
+                    
+                    <codesetd>
+                                                						
+                        
+                        <codesetn>Eleven Digit Hydrologic Unit Code</codesetn>
+                                                						
+                        
+                        <codesets>NJDEP</codesets>
+                                                					
+                    
+                    </codesetd>
+                                        				
+                
+                </attrdomv>
+            </attr>
+            <attr>
+                <attrlabl>HUC14</attrlabl>
+                <attrdef>Fourteen Digit Hydrologic Unit Code</attrdef>
+                <attrdefs>NJDEP</attrdefs>
+                <attrdomv>
+                                        					
+                    
+                    <codesetd>
+                                                						
+                        
+                        <codesetn>Fourteen Digit Hydrologic Unit Code</codesetn>
+                                                						
+                        
+                        <codesets>NJDEP</codesets>
+                                                					
+                    
+                    </codesetd>
+                                        				
+                
+                </attrdomv>
+            </attr>
+            <attr>
+                <attrlabl>WMA</attrlabl>
+                <attrdef>Watershed Management Area Number</attrdef>
+                <attrdefs>NJDEP</attrdefs>
+                <attrdomv>
+                                        					
+                    
+                    <udom>See database for assigned watershed management area number</udom>
+                                        				
+                
+                </attrdomv>
+            </attr>
+            <attr>
+                <attrlabl>WMA_NAME</attrlabl>
+                <attrdef>Watershed Management Area Name</attrdef>
+                <attrdefs>NJDEP</attrdefs>
+                <attrdomv>
+                                        					
+                    
+                    <udom>See database for assigned watershed management area name</udom>
+                                        				
+                
+                </attrdomv>
+            </attr>
+            <attr>
+                <attrlabl>WREGION</attrlabl>
+                <attrdef>Water Region</attrdef>
+                <attrdefs>NJDEP</attrdefs>
+                <attrdomv>
+                                        					
+                    
+                    <udom>See database for assigned water region</udom>
+                                        				
+                
+                </attrdomv>
+            </attr>
+            <attr>
+                <attrlabl>WR_NAME</attrlabl>
+                <attrdef>Water Region Name</attrdef>
+                <attrdefs>NJDEP</attrdefs>
+                <attrdomv>
+                                        					
+                    
+                    <udom>See database for assigned water region name</udom>
+                                        				
+                
+                </attrdomv>
+            </attr>
+            <attr>
+                <attrlabl>SW_NAME</attrlabl>
+                <attrdef>Sub Watershed name</attrdef>
+                <attrdefs>NJDEP</attrdefs>
+                <attrdomv>
+                                        					
+                    
+                    <udom>See database for sub watershed name</udom>
+                                        				
+                
+                </attrdomv>
+            </attr>
+            <attr>
+                <attrlabl>W_NAME</attrlabl>
+                <attrdef>Watershed Name</attrdef>
+                <attrdefs>NJDEP</attrdefs>
+                <attrdomv>
+                                        					
+                    
+                    <udom>See database for watershed name</udom>
+                                        				
+                
+                </attrdomv>
+            </attr>
+            <attr>
+                <attrlabl>SHAPE</attrlabl>
+                <attrdef>Feature geometry.</attrdef>
+                <attrdefs>ESRI</attrdefs>
+                <attrdomv>
+                                        					
+                    
+                    <udom>Coordinates defining the features.</udom>
+                                        				
+                
+                </attrdomv>
+            </attr>
+        </detailed>
+    </eainfo>
+    <distinfo>
+        <distrib>
+            <cntinfo>
+                <cntorgp>
+                    <cntorg>NJDEP/DOIT/Bureau of GIS</cntorg>
+                    <cntper>GIS Help Desk</cntper>
+                </cntorgp>
+                <cntaddr>
+                    <addrtype>mailing and physical</addrtype>
+                    <address>401 East State Street</address>
+                    <city>Trenton</city>
+                    <state>NJ</state>
+                    <postal>08625</postal>
+                </cntaddr>
+                <cntvoice>(609) 777-0672</cntvoice>
+                <cntfax>(609) 292-7900</cntfax>
+                <cntemail>gisnet@dep.nj.gov</cntemail>
+            </cntinfo>
+        </distrib>
+        <resdesc>Downloadable Data</resdesc>
+        <distliab>This organization provides the geographic data "as is". This organization makes no guarantee or warranty concerning the accuracy of information contained in the geographic data. Also, this organization makes no warranty either expressed or implied, regarding the condition of the product or its fitness for any particular purpose. The burden for determining fitness for use lies entirely with the user. Although these files have been processed successfully on computers at this organization, no warranty is made by this organization regarding the use of these data on any other system, nor does the fact of distribution constitute or imply any such warranty. See also "Use Constraints" for additional distribution and/or data use requirements.</distliab>
+        <stdorder>
+            <digform>
+                <digtinfo>
+                    <formname>DEP distributes ESRI .SHP and/or GDB. Some data may be NJ GeoWeb "display only" layers.</formname>
+                    <formvern>latest version</formvern>
+                    <filedec>WinZip</filedec>
+                </digtinfo>
+                <digtopt>
+                    <onlinopt>
+                        <computer>
+                            <networka>
+                                <networkr>https://www.nj.gov/dep/gis/geowebsplash.htm</networkr>
+                            </networka>
+                        </computer>
+                        <computer>
+                            <networka>
+                                <networkr>https://www.nj.gov/dep/gis</networkr>
+                            </networka>
+                        </computer>
+                    </onlinopt>
+                    <onlinopt>
+                        <computer>
+                            <networka>
+                                <networkr>https://gisdata-njdep.opendata.arcgis.com/</networkr>
+                            </networka>
+                        </computer>
+                    </onlinopt>
+                </digtopt>
+            </digform>
+            <fees>None</fees>
+            <ordering>All available NJDEP public GIS data can be downloaded for free. Some data shown in NJGeoWeb application may not yet be available for download due to various data or distribution issues. Please email gisnet@dep.nj.gov with any data distribution questions.</ordering>
+        </stdorder>
+    </distinfo>
+    <metainfo>
+        <metc>
+            <cntinfo>
+                <cntorgp>
+                    <cntorg>NJDEP/DOIT/BGIS</cntorg>
+                    <cntper>Lou Jacoby</cntper>
+                </cntorgp>
+                <cntpos>GIS Specialist</cntpos>
+                <cntaddr>
+                    <addrtype>mailing and physical</addrtype>
+                    <address>401 East State Street, PO Box 428</address>
+                    <city>Trenton</city>
+                    <state>NJ</state>
+                    <postal>08625-0428</postal>
+                </cntaddr>
+                <cntvoice>609-777-0672</cntvoice>
+                <cntfax>609-292-7900</cntfax>
+                <cntemail>gisnet@dep.nj.gov</cntemail>
+            </cntinfo>
+        </metc>
+        <metstdn>FGDC Content Standard for Digital Geospatial Metadata</metstdn>
+        <metstdv>FGDC-STD-001-1998</metstdv>
+        <mettc>local time</mettc>
+    </metainfo>
+</metadata>

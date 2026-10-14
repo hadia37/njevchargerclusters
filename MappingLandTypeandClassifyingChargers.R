@@ -95,6 +95,7 @@ ggplot()+
   ) +
   labs(title = "New Jersey Rural Chargers") +
   theme_minimal()
+ggsave("New Jersey Rural Chargers.png")
 
 #Urban L2 chargers
 ggplot()+
@@ -107,6 +108,7 @@ ggplot()+
   geom_sf(data = urbanL2, color = "yellow", size = 1) +
   labs(title = "New Jersey Urban L2 Chargers") +
   theme_minimal()
+ggsave("New Jersey Urban L2 Chargers.png")
 
 #Urban DCFC chargers 
 ggplot()+
@@ -119,3 +121,15 @@ ggplot()+
   geom_sf(data = urbanDCFC, color= "yellow", size = 1) +
   labs(title = "New Jersey Urban DCFC Chargers") +
   theme_minimal()
+ggsave("New Jersey Urban DCFC Chargers.png")
+
+#Identifying rural vs urban municipalities
+municipalities <- st_read("NJ_municipalities_3857.shp")
+municipalities <- st_transform(municipalities, st_crs(rural_nj))
+municipalities <- st_make_valid(municipalities)
+
+ruralmunis <- st_intersection(municipalities, rural_nj)
+muni_list <- unique(ruralmunis$MUN)
+print(muni_list)
+print(length(muni_list))
+write_sf(ruralmunis, "Rural Municipalities.shp")

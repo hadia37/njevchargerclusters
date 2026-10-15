@@ -39,14 +39,68 @@ ruralmunis$corridor_gap <-
 
 ##Rule 2: Population-based gaps
 ruralmunis$pop_gap <-
-(ruralmunis$population > 10000) &
+(ruralmunis$POP2020 > 10000) &
 (ruralmunis$dist_to_dcfc_m > gap_dist_m)
 
 #Combine gaps
 ruralmunis$gap_flag <- ruralmunis$corridor_gap | ruralmunis$pop_gap
+write_sf(ruralmunis, "Rural Municipality Gaps.shp")
+ruralmuni_df <-
+  st_drop_geometry(ruralmunis)
+write_csv(ruralmuni_df, "Rural Municipality Gaps.csv")
 
 #HOTSPOT ANALYSIS for urban areas?
+#Count chargers by municipality for DCFC
+urbanmunis <- st_read("Urban Municipalities.shp")
+urbanmunis <- urbanmunis %>% 
+  mutate(charger_count = 
+           lengths(st_intersects(urbanmunis, dcfc)))
+# Neighbor list 
+nb <- poly2nb(urbanmunis) 
+lw <- nb2listw(nb, style = "W") 
 
+#GETIS-ORD Gi* Method
+gi <- local_gstar(traurbanmuniscts$charger_count, lw) 
+
+urbanmunis$gi_z <- gi 
+urbanmunis$gi_p <- 2 * pnorm(-abs(gi)) 
+
+#significance
+urbanmunis$gi_class <- case_when( 
+  urbanmunis$gi_z >= 2.58 ~ "Hotspot (99%)", 
+  urbanmunis$gi_z >= 1.96 ~ "Hotspot (95%)", 
+  urbanmunis$gi_z <= -2.58 ~ "Coldspot (99%)", 
+  urbanmunis$gi_z <= -1.96 ~ "Coldspot (95%)", 
+  TRUE ~ "Not Significant" 
+) 
+
+##Count chargers by census tract for L2
+L2 <- chargers%>%
+  filter(level == "L2")
+#download census tracts
+nj_tracts <- st_read("tl_2022_34_tract.shp")
+tracts <- nj_tracts %>% 
+  mutate(charger_count = 
+           lengths(st_intersects(nj_tracts, L2))) 
+# Neighbor list 
+nb <- poly2nb(tracts) 
+lw <- nb2listw(nb, style = "W") 
+
+# GETIS-ORD Gi* Method
+gi <- local_gstar(tracts$charger_count, lw) 
+
+tracts$gi_z <- gi 
+tracts$gi_p <- 2 * pnorm(-abs(gi)) 
+
+tracts$gi_class <- case_when( 
+  tracts$gi_z >= 2.58 ~ "Hotspot (99%)", 
+  tracts$gi_z >= 1.96 ~ "Hotspot (95%)", 
+  tracts$gi_z <= -2.58 ~ "Coldspot (99%)", 
+  tracts$gi_z <= -1.96 ~ "Coldspot (95%)", 
+  TRUE ~ "Not Significant" 
+) 
+
+#-----------------------------------------#
 #Accessibility Analysis
 library(osrm) 
 library(dodgr) 

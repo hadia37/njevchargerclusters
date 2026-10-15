@@ -23,8 +23,8 @@ mi_to_m <- 1609.344 #conversion factor
 corridor_buf_m <- corridor_buffer_miles * mi_to_m
 gap_dist_m <- gap_distance_miles * mi_to_m
 
-corridor_buffer <- st_buffer(majorroutes, corridor_buf_m) |>
-  st_union(corridor_buffer)
+corridor_buffer <- st_buffer(majorroutes, corridor_buf_m)
+  #st_union(corridor_buffer)
 
 #Calculate distances from each municipality to nearest DCFC and add to municipality dataset
 nearest <- st_nn(ruralmunis, dcfc, k = 1, returnDist = TRUE)
@@ -32,9 +32,10 @@ ruralmunis$dist_to_dcfc_m <- unlist(nearest$dist)
 
 ##Rule 1: Corridor-based gaps. Will assign TRUE if meets gap parameters, FALSE if not
 corridor_munis <- st_intersects(ruralmunis, corridor_buffer, sparse = FALSE) #creates matrix for each muni by each corridor
+ruralmunis$touches_corridor <- rowSums(corridor_munis) > 0
 ruralmunis$corridor_gap <-
-  corridor_munis &
-  ruralmunis$dist_to_dcfc_m > gap_dist_m
+  ruralmunis$touches_corridor &
+  (ruralmunis$dist_to_dcfc_m > gap_dist_m)
 
 ##Rule 2: Population-based gaps
 ruralmunis$pop_gap <-

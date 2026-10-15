@@ -3,6 +3,50 @@ library(tidyverse)
 library(sf)
 library(tigris)
 
+#Rural municipality charger gaps: no chargers within 10 miles of 3mi buffer of major corridors and 3mi radius of municipality greater than 10,000
+library(nngeo)
+majorroutes <- st_read("Major_Routes.shp")
+ruralmunis <- st_read("Rural Municipalities.shp")
+chargers <- st_read("EVChargersClassified.shp")
+
+#reproject for distance calculations
+majorroutes <- st_transform(majorroutes, 3857)
+ruralmunis <- st_transform(ruralmunis, 3857)
+chargers <- st_transform(chargers, 3857)
+dcfc <- chargers%>%
+  filter(level == "DCFC") #still includes urban chargers 
+#define parameters and create buffers (try different distances)
+corridor_buffer_miles <- 3
+gap_distance_miles <- 10
+
+mi_to_m <- 1609.344 #conversion factor
+corridor_buf_m <- corridor_buffer_miles * mi_to_m
+gap_dist_m <- gap_distance_miles * mi_to_m
+
+corridor_buffer <- st_buffer(majorroutes, corridor_buf_m) |>
+  st_union(corridor_buffer)
+
+#Calculate distances from each municipality to nearest DCFC and add to municipality dataset
+nearest <- st_nn(ruralmunis, dcfc, k = 1, returnDist = TRUE)
+ruralmunis$dist_to_dcfc_m <- unlist(nearest$dist)
+
+##Rule 1: Corridor-based gaps. Will assign TRUE if meets gap parameters, FALSE if not
+corridor_munis <- st_intersects(ruralmunis, corridor_buffer, sparse = FALSE) #creates matrix for each muni by each corridor
+ruralmunis$corridor_gap <-
+  corridor_munis &
+  ruralmunis$dist_to_dcfc_m > gap_dist_m
+
+##Rule 2: Population-based gaps
+ruralmunis$pop_gap <-
+(ruralmunis$population > 10000) &
+(ruralmunis$dist_to_dcfc_m > gap_dist_m)
+
+#Combine gaps
+ruralmunis$gap_flag <- ruralmunis$corridor_gap | ruralmunis$pop_gap
+
+#HOTSPOT ANALYSIS for urban areas?
+
+#Accessibility Analysis
 library(osrm) 
 library(dodgr) 
 library(stplanr) 
@@ -13,7 +57,6 @@ library(osmextract)
 chargers <- st_read("EVChargersClassified.shp")
 options(tigris_use_cache = TRUE)
 
-#Accessibility Analysis
 #Starting with calculating nearest travel distance to gas stations in rural vs urban areas to use as threshold
 gas <- st_read("Gas_Service_Stations_of_New_Jersey.shp")
 gas <- st_transform(gas, 4326)

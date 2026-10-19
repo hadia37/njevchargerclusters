@@ -73,10 +73,11 @@ ggplot()+
     high = "purple", 
     midpoint = mean(urbanmunis$charger_count, na.rm = TRUE)) +
   theme_void() + 
-  labs(title = "Urban DCFC Chargers")
+  labs(title = "Urban DCFC Chargers by Municipality")
 
 #Create neighbor list and weights 
-nb1 <- poly2nb(urbanmunis) 
+nb1 <- poly2nb(urbanmunis)
+#have to handle empty neighbors
 lw1 <- nb2listw(nb1, style = "W")
 
 #GETIS-ORD Gi* Method to compute hot spots statistics
@@ -101,53 +102,53 @@ ggplot()+
   geom_sf(data = gi, aes(fill= gi_z), color = "black") +
   scale_fill_gradient2(low = "blue", mid = "white", high = "red") +
   theme_minimal() + 
-  labs(title = "Urban DCFC Hot Spot Analysis", fill = "GI* Value")
+  labs(title = "Urban DCFC Hot Spot Analysis", fill = "GI Value")
 
-##Count chargers by census tract for L2
+##Count chargers by census blocks for L2
 L2 <- chargers%>%
   filter(level == "L2")
 #Pulling in census tracts
-nj_tracts <- st_read("tl_2022_34_tract.shp")
-nj_tracts <- st_transform(nj_tracts, 3857)
+nj_blocks <- st_read("tl_2026_34_tabblock20.shp")
+nj_blocks <- st_transform(nj_blocks, 3857)
 census_urban_areas <- st_read("USA_Census_Urban_Areas.shp")
 census_urban_areas <- st_transform(census_urban_areas, 3857)
-#filtering to only urban tracts
-urbantracts <- st_intersection(nj_tracts, urbanmunis)|>
+#filtering to only urban blocks
+urbanblocks <- st_intersection(nj_blocks, urbanmunis)|>
   st_make_valid() |>
   st_buffer(0)
-urbantracts <- urbantracts %>% 
+urbanblocks <- urbanblocks %>% 
   mutate(charger_count = 
-           lengths(st_intersects(urbantracts, L2))) 
-urbantracts$charger_count <- as.numeric(urbantracts$charger_count)
+           lengths(st_intersects(urbanblocks, L2))) 
+urbanblocks$charger_count <- as.numeric(urbanblocks$charger_count)
 
 #preliminary visualization of charger counts
 ggplot()+
   geom_sf(data = nj, fill = "white", color = "black", linewidth = 0.5) +
-  geom_sf(data = urbantracts, aes(fill= charger_count), color = "black", linewidth = 0.15) +
+  geom_sf(data = urbanblocks, aes(fill= charger_count), color = "black", linewidth = 0.15) +
   scale_fill_gradient2(
     name = "L2 Charger Count", 
     low = "white", 
     mid = "lavender", 
     high = "purple", 
-    midpoint = mean(urbantracts$charger_count, na.rm = TRUE)) +
+    midpoint = mean(urbanblocks$charger_count, na.rm = TRUE)) +
   theme_void() + 
-  labs(title = "Urban L2 Chargers")
+  labs(title = "Urban L2 Chargers by Census Block")
 
 #Neighbor list and weights
-nb2 <- poly2nb(urbantracts) 
+nb2 <- poly2nb(urbanblocks) 
 lw2 <- nb2listw(nb2, style = "W") 
 
 # GETIS-ORD Gi* Method
-gi2 <- local_gstar(urbantracts$charger_count, lw) 
+gi2 <- local_gstar(urbanblocks$charger_count, lw) 
 
-urbantracts$gi_z <- gi2 
-urbantracts$gi_p <- 2 * pnorm(-abs(gi2)) 
+urbanblocks$gi_z <- gi2 
+urbanblocks$gi_p <- 2 * pnorm(-abs(gi2)) 
 
-urbantracts$gi_class <- case_when( 
-  urbantracts$gi_z >= 2.58 ~ "Hotspot (99%)", 
-  urbantracts$gi_z >= 1.96 ~ "Hotspot (95%)", 
-  urbantracts$gi_z <= -2.58 ~ "Coldspot (99%)", 
-  urbantracts$gi_z <= -1.96 ~ "Coldspot (95%)", 
+urbanblocks$gi_class <- case_when( 
+  urbanblocks$gi_z >= 2.58 ~ "Hotspot (99%)", 
+  urbanblocks$gi_z >= 1.96 ~ "Hotspot (95%)", 
+  urbanblocks$gi_z <= -2.58 ~ "Coldspot (99%)", 
+  urbanblocks$gi_z <= -1.96 ~ "Coldspot (95%)", 
   TRUE ~ "Not Significant" 
 ) 
 
@@ -157,6 +158,8 @@ ggplot()+
   scale_fill_gradient2(low = "blue", mid = "white", high = "red") +
   theme_minimal() + 
   labs(title = "Urban L2 Hot Spot Analysis", fill = "GI* Value")
+
+#MUD percentage for housing data, also compare gas stations
 #-----------------------------------------#
 #Accessibility Analysis
 library(osrm) 

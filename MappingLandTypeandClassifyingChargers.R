@@ -2,7 +2,6 @@
 library(tidyverse) #includes ggplot2
 library(sf)
 library(tigris) #for NJ boundaries
-library(ggnewscale)
 
 #Loading data
 ev_stations <- read.csv("alt_fuel_stations (Aug 26 2026).csv") #can get a more updated version for final analysis

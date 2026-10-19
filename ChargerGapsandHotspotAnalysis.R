@@ -1,0 +1,233 @@
+#Loading packages and data
+library(tidyverse)
+library(sf)
+library(tigris)
+options(tigris_use_cache = TRUE) 
+
+#Rural municipality charger gaps: no chargers within 10 miles of 3mi buffer of major corridors and 3mi radius of municipality greater than 10,000
+library(nngeo)
+majorroutes <- st_read("Major_Routes.shp")
+ruralmunis <- st_read("Rural Municipalities.shp")
+chargers <- st_read("EVChargersClassified.shp")
+
+#reproject for distance calculations
+majorroutes <- st_transform(majorroutes, 3857)
+ruralmunis <- st_transform(ruralmunis, 3857)
+chargers <- st_transform(chargers, 3857)
+dcfc <- chargers%>%
+  filter(level == "DCFC") #still includes urban chargers 
+#define parameters and create buffers (try different distances)
+corridor_buffer_miles <- 3
+gap_distance_miles <- 10
+
+mi_to_m <- 1609.344 #conversion factor
+corridor_buf_m <- corridor_buffer_miles * mi_to_m
+gap_dist_m <- gap_distance_miles * mi_to_m
+
+corridor_buffer <- st_buffer(majorroutes, corridor_buf_m)
+  #st_union(corridor_buffer)
+
+#Calculate distances from each municipality to nearest DCFC and add to municipality dataset
+nearest <- st_nn(ruralmunis, dcfc, k = 1, returnDist = TRUE)
+ruralmunis$dist_to_dcfc_m <- unlist(nearest$dist)
+
+##Rule 1: Corridor-based gaps. Will assign TRUE if meets gap parameters, FALSE if not
+corridor_munis <- st_intersects(ruralmunis, corridor_buffer, sparse = FALSE) #creates matrix for each muni by each corridor
+ruralmunis$touches_corridor <- rowSums(corridor_munis) > 0
+ruralmunis$corridor_gap <-
+  ruralmunis$touches_corridor &
+  (ruralmunis$dist_to_dcfc_m > gap_dist_m)
+
+##Rule 2: Population-based gaps
+ruralmunis$pop_gap <-
+(ruralmunis$POP2020 > 10000) &
+(ruralmunis$dist_to_dcfc_m > gap_dist_m)
+
+#Combine gaps
+ruralmunis$gap_flag <- ruralmunis$corridor_gap | ruralmunis$pop_gap
+write_sf(ruralmunis, "Rural Municipality Gaps.shp")
+ruralmuni_df <-
+  st_drop_geometry(ruralmunis)
+write_csv(ruralmuni_df, "Rural Municipality Gaps.csv")
+
+
+
+#HOTSPOT ANALYSIS for urban areas?
+library(spdep) 
+#Count chargers by municipality for DCFC
+urbanmunis <- st_read("Urban Municipalities.shp")
+urbanmunis <- st_transform(urbanmunis, 3857)
+urbanmunis <- urbanmunis %>% 
+  mutate(charger_count = 
+           lengths(st_intersects(urbanmunis, dcfc))) #should this instead be port counts rather than stations or should it be consistent?
+urbanmunis$charger_count <- as.numeric(urbanmunis$charger_count)
+
+#preliminary visualization of charger counts
+ggplot()+
+  geom_sf(data = nj, fill = "white", color = "black", linewidth = 0.5) +
+  geom_sf(data = urbanmunis, aes(fill= charger_count), color = "black", linewidth = 0.15) +
+  scale_fill_gradient2(
+    name = "DCFC Charger Count", 
+    low = "white", 
+    mid = "lavender", 
+    high = "purple", 
+    midpoint = mean(urbanmunis$charger_count, na.rm = TRUE)) +
+  theme_void() + 
+  labs(title = "Urban DCFC Chargers")
+
+#Create neighbor list and weights 
+nb1 <- poly2nb(urbanmunis) 
+lw1 <- nb2listw(nb1, style = "W")
+
+#GETIS-ORD Gi* Method to compute hot spots statistics
+gi1 <- local_gstar(urbanmunis$charger_count, lw) 
+urbanmunis$gi_z <- gi1 
+urbanmunis$gi_p <- 2 * pnorm(-abs(gi1)) 
+
+#significance
+urbanmunis$gi_class <- case_when( 
+  urbanmunis$gi_z >= 2.58 ~ "Hotspot (99%)", 
+  urbanmunis$gi_z >= 1.96 ~ "Hotspot (95%)", 
+  urbanmunis$gi_z <= -2.58 ~ "Coldspot (99%)", 
+  urbanmunis$gi_z <= -1.96 ~ "Coldspot (95%)", 
+  TRUE ~ "Not Significant" 
+) 
+
+#Creating map to visualize hotspots
+nj <- states(cb = TRUE, year = 2024, state = "New Jersey") |>
+  st_transform(st_crs(ruralmunis))
+ggplot()+
+  geom_sf(data = nj, aes(fill = "white"), color = "black", linewidth = 0.5) +
+  geom_sf(data = gi, aes(fill= gi_z), color = "black") +
+  scale_fill_gradient2(low = "blue", mid = "white", high = "red") +
+  theme_minimal() + 
+  labs(title = "Urban DCFC Hot Spot Analysis", fill = "GI* Value")
+
+##Count chargers by census tract for L2
+L2 <- chargers%>%
+  filter(level == "L2")
+#Pulling in census tracts
+nj_tracts <- st_read("tl_2022_34_tract.shp")
+nj_tracts <- st_transform(nj_tracts, 3857)
+census_urban_areas <- st_read("USA_Census_Urban_Areas.shp")
+census_urban_areas <- st_transform(census_urban_areas, 3857)
+#filtering to only urban tracts
+urbantracts <- st_intersection(nj_tracts, urbanmunis)|>
+  st_make_valid() |>
+  st_buffer(0)
+urbantracts <- urbantracts %>% 
+  mutate(charger_count = 
+           lengths(st_intersects(urbantracts, L2))) 
+urbantracts$charger_count <- as.numeric(urbantracts$charger_count)
+
+#preliminary visualization of charger counts
+ggplot()+
+  geom_sf(data = nj, fill = "white", color = "black", linewidth = 0.5) +
+  geom_sf(data = urbantracts, aes(fill= charger_count), color = "black", linewidth = 0.15) +
+  scale_fill_gradient2(
+    name = "L2 Charger Count", 
+    low = "white", 
+    mid = "lavender", 
+    high = "purple", 
+    midpoint = mean(urbantracts$charger_count, na.rm = TRUE)) +
+  theme_void() + 
+  labs(title = "Urban L2 Chargers")
+
+#Neighbor list and weights
+nb2 <- poly2nb(urbantracts) 
+lw2 <- nb2listw(nb2, style = "W") 
+
+# GETIS-ORD Gi* Method
+gi2 <- local_gstar(urbantracts$charger_count, lw) 
+
+urbantracts$gi_z <- gi2 
+urbantracts$gi_p <- 2 * pnorm(-abs(gi2)) 
+
+urbantracts$gi_class <- case_when( 
+  urbantracts$gi_z >= 2.58 ~ "Hotspot (99%)", 
+  urbantracts$gi_z >= 1.96 ~ "Hotspot (95%)", 
+  urbantracts$gi_z <= -2.58 ~ "Coldspot (99%)", 
+  urbantracts$gi_z <= -1.96 ~ "Coldspot (95%)", 
+  TRUE ~ "Not Significant" 
+) 
+
+ggplot()+
+  geom_sf(data = nj, aes(fill = "white"), color = "black", linewidth = 0.5) +
+  geom_sf(data = gi2, aes(fill= gi_z), color = "black") +
+  scale_fill_gradient2(low = "blue", mid = "white", high = "red") +
+  theme_minimal() + 
+  labs(title = "Urban L2 Hot Spot Analysis", fill = "GI* Value")
+#-----------------------------------------#
+#Accessibility Analysis
+library(osrm) 
+library(dodgr) 
+library(stplanr) 
+library(sfdep) 
+library(osmextract)
+
+chargers <- st_read("EVChargersClassified.shp")
+options(tigris_use_cache = TRUE)
+
+#Starting with calculating nearest travel distance to gas stations in rural vs urban areas to use as threshold
+gas <- st_read("Gas_Service_Stations_of_New_Jersey.shp")
+gas <- st_transform(gas, 4326)
+urban_rural <- st_read("UrbanRural.shp")
+gas <- st_join(gas, urban_rural)
+
+#Create travel distance matrix for gas stations
+nj_osm <- oe_get("New Jersey", layer = "lines")
+graph <- weight_streetnet(nj_osm)
+if (file.exists("nj_graph.rds")) {
+  graph <- readRDS("nj_graph.rds")
+} else {
+  nj_osm <- oe_get_network(
+    place = "New Jersey",
+    mode = "driving"
+  )
+  graph <- weight_streetnet(nj_osm)
+  saveRDS(graph, "nj_graph.rds")
+}
+
+gas_df <- gas %>%
+  mutate(lon=st_coordinates(.)[,1],
+         lat=st_coordinates(.)[,2]) %>%
+  st_drop_geometry()
+
+dist_matrix <- dodgr=dists(graph, from = gas_df, to = gas_df)
+gas$nn_dist_m <- apply(dist_matrix + diag(Inf, nrow(dist_matrix)), 1, min)
+
+#tm <- osrmTable(src = gas_df[, c("lon", "lat")], dst = gas_df[, c("lon", "lat")])
+#gas$nn_time_min <- apply(tm$durations + diag(Inf, nrow(tm$durations)), 1, min)
+
+#Calculating threshold travel distance for rural vs urban using mean/median
+#Should i use standard deviation or percentiles instead? Switching to dodgr instead of osrm
+urban_gas <- gas %>%
+  fiter(urban_rural == "urban")
+rural_gas <- gas %>%
+  fiter(urban_rural == "rural")
+urban_dist_threshold <- median(urban_gas$nn_dist_m, na.rm = TRUE)
+rural_dist_threshold <- median(rural_gas$nn_dist_m, na.rm = TRUE)
+
+# Now for chargers: Create travel distance matrix
+charger_coords <- st_coordinates(chargers) 
+chargers_df <- chargers %>% 
+  mutate(lon = charger_coords[,1], 
+         lat = charger_coords[,2]) %>% 
+  st_drop_geometry() 
+
+dist_matrix2 <- dodgr=dists(graph, from = chargers_df, to = chargers_df)
+chargers$nn_dist_m <- apply(dist_matrix2 + diag(Inf, nrow(dist_matrix2)), 1, min)
+
+#travelmatrix <- osrmTable(src = chargers_df[, c("lon", "lat")], 
+                #dst = chargers_df[, c("lon", "lat")]) 
+#chargers$nearest_dist_min <- apply(travelmatrix$durations, 1, min) 
+
+#Classify gap areas
+chargers <- chargers %>% 
+  mutate( 
+    gap_flag = case_when( 
+      urban_rural == "rural" & nn_dist_m > rural_dist_threshold ~ TRUE, 
+      urban_rural == "urban" & nn_dist_m > urban_dist_threshold ~ TRUE, 
+      TRUE ~ FALSE 
+    ) 
+  ) 

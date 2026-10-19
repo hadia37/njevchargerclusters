@@ -2,6 +2,7 @@
 library(tidyverse)
 library(sf)
 library(tigris)
+options(tigris_use_cache = TRUE) 
 
 #Rural municipality charger gaps: no chargers within 10 miles of 3mi buffer of major corridors and 3mi radius of municipality greater than 10,000
 library(nngeo)
@@ -49,21 +50,39 @@ ruralmuni_df <-
   st_drop_geometry(ruralmunis)
 write_csv(ruralmuni_df, "Rural Municipality Gaps.csv")
 
+
+
 #HOTSPOT ANALYSIS for urban areas?
+library(spdep) 
 #Count chargers by municipality for DCFC
 urbanmunis <- st_read("Urban Municipalities.shp")
+urbanmunis <- st_transform(urbanmunis, 3857)
 urbanmunis <- urbanmunis %>% 
   mutate(charger_count = 
-           lengths(st_intersects(urbanmunis, dcfc)))
-# Neighbor list 
-nb <- poly2nb(urbanmunis) 
-lw <- nb2listw(nb, style = "W") 
+           lengths(st_intersects(urbanmunis, dcfc))) #should this instead be port counts rather than stations or should it be consistent?
+urbanmunis$charger_count <- as.numeric(urbanmunis$charger_count)
 
-#GETIS-ORD Gi* Method
-gi <- local_gstar(traurbanmuniscts$charger_count, lw) 
+#preliminary visualization of charger counts
+ggplot()+
+  geom_sf(data = nj, fill = "white", color = "black", linewidth = 0.5) +
+  geom_sf(data = urbanmunis, aes(fill= charger_count), color = "black", linewidth = 0.15) +
+  scale_fill_gradient2(
+    name = "DCFC Charger Count", 
+    low = "white", 
+    mid = "lavender", 
+    high = "purple", 
+    midpoint = mean(urbanmunis$charger_count, na.rm = TRUE)) +
+  theme_void() + 
+  labs(title = "Urban DCFC Chargers")
 
-urbanmunis$gi_z <- gi 
-urbanmunis$gi_p <- 2 * pnorm(-abs(gi)) 
+#Create neighbor list and weights 
+nb1 <- poly2nb(urbanmunis) 
+lw1 <- nb2listw(nb1, style = "W") 
+
+#GETIS-ORD Gi* Method to compute hot spots statistics
+gi1 <- local_gstar(urbanmunis$charger_count, lw) 
+urbanmunis$gi_z <- gi1 
+urbanmunis$gi_p <- 2 * pnorm(-abs(gi1)) 
 
 #significance
 urbanmunis$gi_class <- case_when( 
@@ -74,23 +93,50 @@ urbanmunis$gi_class <- case_when(
   TRUE ~ "Not Significant" 
 ) 
 
+#Creating map to visualize hotspots
+nj <- states(cb = TRUE, year = 2024, state = "New Jersey") |>
+  st_transform(st_crs(ruralmunis))
+ggplot()+
+  geom_sf(data = nj, aes(fill = "white"), color = "black", linewidth = 0.5) +
+  geom_sf(data = gi, aes(fill= gi_z), color = "black") +
+  scale_fill_gradient2(low = "blue", mid = "white", high = "red") +
+  theme_minimal() + 
+  labs(title = "Urban DCFC Hot Spot Analysis", fill = "GI* Value")
+
 ##Count chargers by census tract for L2
 L2 <- chargers%>%
   filter(level == "L2")
-#download census tracts
+#Pulling in census tracts
 nj_tracts <- st_read("tl_2022_34_tract.shp")
+nj_tracts <- st_transform(nj_tracts, 3857)
+#HAVE TO FILTER TO ONLY RURAL TRACTS
 tracts <- nj_tracts %>% 
   mutate(charger_count = 
            lengths(st_intersects(nj_tracts, L2))) 
-# Neighbor list 
-nb <- poly2nb(tracts) 
-lw <- nb2listw(nb, style = "W") 
+tracts$charger_count <- as.numeric(tracts$charger_count)
+
+#preliminary visualization of charger counts
+ggplot()+
+  geom_sf(data = nj, fill = "white", color = "black", linewidth = 0.5) +
+  geom_sf(data = tracts, aes(fill= charger_count), color = "black", linewidth = 0.15) +
+  scale_fill_gradient2(
+    name = "L2 Charger Count", 
+    low = "white", 
+    mid = "lavender", 
+    high = "purple", 
+    midpoint = mean(tracts$charger_count, na.rm = TRUE)) +
+  theme_void() + 
+  labs(title = "Urban L2 Chargers")
+
+#Neighbor list and weights
+nb2 <- poly2nb(tracts) 
+lw2 <- nb2listw(nb2, style = "W") 
 
 # GETIS-ORD Gi* Method
-gi <- local_gstar(tracts$charger_count, lw) 
+gi2 <- local_gstar(tracts$charger_count, lw) 
 
-tracts$gi_z <- gi 
-tracts$gi_p <- 2 * pnorm(-abs(gi)) 
+tracts$gi_z <- gi2 
+tracts$gi_p <- 2 * pnorm(-abs(gi2)) 
 
 tracts$gi_class <- case_when( 
   tracts$gi_z >= 2.58 ~ "Hotspot (99%)", 
@@ -100,12 +146,17 @@ tracts$gi_class <- case_when(
   TRUE ~ "Not Significant" 
 ) 
 
+ggplot()+
+  geom_sf(data = nj, aes(fill = "white"), color = "black", linewidth = 0.5) +
+  geom_sf(data = gi2, aes(fill= gi_z), color = "black") +
+  scale_fill_gradient2(low = "blue", mid = "white", high = "red") +
+  theme_minimal() + 
+  labs(title = "Urban L2 Hot Spot Analysis", fill = "GI* Value")
 #-----------------------------------------#
 #Accessibility Analysis
 library(osrm) 
 library(dodgr) 
 library(stplanr) 
-library(spdep) 
 library(sfdep) 
 library(osmextract)
 

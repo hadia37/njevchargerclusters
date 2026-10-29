@@ -69,18 +69,19 @@ urban_nj_clean <- st_sf(urban_rural = "urban", geometry = st_geometry(urban_unio
 rural_nj_clean <- st_sf(urban_rural = "rural", geometry = st_geometry(rural_geom))
 # Combine them cleanly
 urban_rural <- bind_rows(urban_nj_clean, rural_nj_clean)
-urban_rural <- st_transform(urban_rural, 4326)
+urban_rural <- st_transform(urban_rural, 32111)
 urban_rural <- urban_rural |>
   st_make_valid() |>
   st_collection_extract("POLYGON") |>
   st_buffer(0)
 urban_rural_sf <- st_as_sf(urban_rural, coords = c("Longitude", "Latitude"), crs=32111)
-st_write(urban_rural, "UrbanRural.shp")
+st_write(urban_rural, "UrbanRural.shp", append=FALSE)
 
 #Convert charger dataset to sf before spatial join
-chargers_sf <- st_as_sf(ev_stations, coords = c("Longitude", "Latitude"), crs=32111)
+chargers_sf <- st_as_sf(ev_stations, coords = c("Longitude", "Latitude"), crs=4326)
+chargers_sf <- st_transform(chargers_sf, 32111)
 chargers <- st_join(chargers_sf, urban_rural)
-st_write(chargers, "EVChargersClassified.shp")
+st_write(chargers, "EVChargersClassified.shp", append=FALSE)
 
 #Plot urban and rural areas map
 ggplot()+
@@ -114,9 +115,9 @@ ggplot()+
     values = c("Urban" = "grey60", "Rural" = "lightgreen"),
     name = "Area Type"
   ) + 
-  geom_sf(data = onlyrural, aes(color = level), size = 3) +
+  geom_sf(data = onlyrural, aes(color = level), size = 2) +
   scale_color_manual(
-    values = c("L2" = "deepskyblue", "DCFC" = "darkorchid"),
+    values = c("L2" = "yellow", "DCFC" = "darkorchid"),
     name = "Charger Level"
   ) +
   labs(title = "New Jersey Rural Chargers") +
@@ -144,7 +145,7 @@ ggplot()+
     values = c("Urban" = "grey60", "Rural" = "lightgreen"),
     name = "Area Type"
   ) + 
-  geom_sf(data = urbanDCFC, color= "yellow", size = 1) +
+  geom_sf(data = urbanDCFC, color= "purple", size = 1) +
   labs(title = "New Jersey Urban DCFC Chargers") +
   theme_minimal()
 ggsave("New Jersey Urban DCFC Chargers.png")

@@ -18,7 +18,7 @@ dcfc <- chargers%>%
   filter(level == "DCFC") #still includes urban chargers 
 #define parameters and create buffers (try different distances)
 corridor_buffer_miles <- 3
-gap_distance_miles <- 10
+gap_distance_miles <- 15
 
 mi_to_m <- 1609.344 #conversion factor
 corridor_buf_m <- corridor_buffer_miles * mi_to_m
@@ -40,7 +40,7 @@ ruralmunis$corridor_gap <-
 
 ##Rule 2: Population-based gaps
 ruralmunis$pop_gap <-
-(ruralmunis$POP2020 > 10000) &
+(ruralmunis$POP2020 > 5000) &
 (ruralmunis$dist_to_dcfc_m > gap_dist_m)
 
 #Combine gaps
@@ -124,7 +124,7 @@ coords <- st_coordinates(st_point_on_surface(urbanmunis))
 #knn <- knearneigh(coords2, k = 6) #use k nearest neighbor to fix empty neighbor issue (for islands)
 #nb <- knn2nb(knn)
 #distance-band neighbors method
-nb <- dnearneigh(coords, d1 = 0, d2 = 5000) #5km
+nb <- dnearneigh(coords, d1 = 0, d2 = 16093.4) #10 miles in meters
 lw <- nb2listw(nb, style = "W", zero.policy = TRUE)
 
 #Local Moran's I Method to compute hot spots statistics (returns I statistic, p-value, z-score, cluster type indicator)
@@ -159,7 +159,8 @@ ggplot()+
       "High-Low" = "orange",
       "Low-High" = "lightblue", 
       "Not significant" = "grey80"
-      )
+      ),
+    drop = FALSE
   ) +
   theme_minimal() + 
   labs(title = "Urban DCFC Hot Spot Analysis by Municipality (LISA)", fill = "Cluster Type")
@@ -190,14 +191,17 @@ urbanblocks <- urbanblocks %>%
 urbanblocks$n_L2 <- as.numeric(urbanblocks$n_L2)
 
 #preliminary visualization of charger counts
+max <- max(urbanblocks$n_L2)
+my_breaks <- c(0, 1, 2, 3, 4, 5, 25)
+my_colors <- c("lightskyblue1", "skyblue", "deepskyblue1", "deepskyblue2", "deepskyblue3", "deepskyblue4", "darkblue", "black")
 ggplot()+
   geom_sf(data = nj, fill = "white", color = "black", linewidth = 0.5) +
-  geom_sf(data = urbanblocks, aes(fill= n_L2), color = "black", linewidth = 0.05) +
-  scale_fill_gradient2(
+  geom_sf(data = urbanblocks, aes(fill= n_L2), color = "NA") +
+  scale_fill_gradientn(
     name = "L2 Charger Count", 
       colors = my_colors,
-      values = rescale(my_breaks, to = c(0, 1), from = c(0, 15)),
-      breaks = c(0, 1, 2, 3, 4, 5, 10, 15),
+      values = rescale(my_breaks, to = c(0, 1), from = c(0, 25)),
+      breaks = c(0, 1, 2, 3, 4, 5, 25),
     #low = "white", 
     #mid = "lavender", 
     #high = "purple", 
@@ -205,41 +209,40 @@ ggplot()+
   )
   theme_void() + 
   labs(title = "Urban L2 Chargers by Census Block")
-ggsave("Urban L2 Chargers by Census Block.png")
+#ggsave("Urban L2 Chargers by Census Block.png", width = 8, height = 10, dpi = 300)
 
 #Create neighbor list and weights 
-coords2 <- st_coordinates(st_point_on_surface(urbanblocks))
-#knn2 <- knearneigh(coords2, k = 10) #use k nearest neighbor to fix empty neighbor issue (for islands)
-#nb2 <- knn2nb(knn2)
-#distance-band neighbors method
-nb2 <- dnearneigh(coords2, d1 = 0, d2 = 3000) #5km
-lw2 <- nb2listw(nb2, style = "W", zero.policy = TRUE)
+urbanblocks_clean <- urbanblocks[!st_is_empty(urbanblocks), ]
+coords2 <- st_coordinates(st_point_on_surface(urbanblocks_clean))
+block_centroids <- st_centroid(st_geometry(urbanblocks_clean))
+block_neighbors <- knn2nb(knearneigh(block_centroids, k = 6)) #use k nearest neighbor which works better for census blocks where dnearneigh would be distorted by large rural blocks
+block_listw <- nb2listw(block_neighbors, style = "W")
 
 #Local Moran's I Method to compute hot spots statistics (returns I statistic, p-value, z-score, cluster type indicator)
 #multiplies focal deviation by neighboring deviations, includes spatial outliers like high-low and low-high
-local_moran2 <- localmoran(urbanblocks$n_L2, lw2, zero.policy = TRUE) 
-urbanblocks$I <- local_moran2[,1] #adding I statistic to df
-urbanblocks$P <- local_moran2[,5] #adding p-value
+local_moran2 <- localmoran(urbanblocks_clean$n_L2, block_listw) 
+urbanblocks_clean$I <- local_moran2[,1] #adding I statistic to df
+urbanblocks_clean$P <- local_moran2[,5] #adding p-value
 
-x2 <- urbanblocks$n_L2
+x2 <- urbanblocks_clean$n_L2
 x2_mean <- mean(x2)
 z2 <- scale(x2)[,1] #mean standardized charger count of neighbors by I
-lag_z2 <- lag.listw(lw2, z2)
+lag_z2 <- lag.listw(block_listw, z2)
 
-urbanblocks$cluster <- "Not significant"
-urbanblocks$cluster[urbanblocks$P < 0.10 & z2 > 0 & lag_z2 > 0] <- "High-High"
-urbanblocks$cluster[urbanblocks$P < 0.10 & z2 < 0 & lag_z2 < 0] <- "Low-Low"
-urbanblocks$cluster[urbanblocks$P < 0.10 & z2 > 0 & lag_z2 > 0] <- "High-Low"
-urbanblocks$cluster[urbanblocks$P < 0.10 & z2 < 0 & lag_z2 < 0] <- "Low-High"
+urbanblocks_clean$cluster <- "Not significant"
+urbanblocks_clean$cluster[urbanblocks_clean$P < 0.10 & z2 > 0 & lag_z2 > 0] <- "High-High"
+urbanblocks_clean$cluster[urbanblocks_clean$P < 0.10 & z2 < 0 & lag_z2 < 0] <- "Low-Low"
+urbanblocks_clean$cluster[urbanblocks_clean$P < 0.10 & z2 > 0 & lag_z2 > 0] <- "High-Low"
+urbanblocks_clean$cluster[urbanblocks_clean$P < 0.10 & z2 < 0 & lag_z2 < 0] <- "Low-High"
 #classifies whether there is a high dcfc by high dcfc, low dcfc by low dcfc, or an insignificant result
 
 #Creating map to visualize hotspots
 nj <- states(cb = TRUE) |>
   filter(STUSPS == "NJ")
-nj <- st_transform(nj, st_crs(urbanblocks))
+nj <- st_transform(nj, st_crs(urbanblocks_clean))
 ggplot()+
   geom_sf(data = nj, fill = "white", color = "black", linewidth = 0.5) +
-  geom_sf(data = urbanblocks, aes(fill= cluster), color = "grey30", size = 0.05) +
+  geom_sf(data = urbanblocks_clean, aes(fill= cluster), color = "NA", size = 0.05) +
   scale_fill_manual(
     values = c(
       "High-High" = "red",
@@ -247,16 +250,17 @@ ggplot()+
       "High-Low" = "orange",
       "Low-High" = "lightblue", 
       "Not significant" = "grey80"
-    )
+    ),
+    drop = FALSE
   ) +
   theme_minimal() + 
   labs(title = "Urban L2 Hot Spot Analysis by Census Block (LISA)", fill = "Cluster Type")
-ggsave("Urban L2 Hot Spot Analysis by Census Block (LISA).png")
+#ggsave("Urban L2 Hot Spot Analysis by Census Block (LISA).png",  width = 8, height = 10, dpi = 300)
 
-write_sf(urbanblocks, "Urban Census Block L2 Charger Hotspot Analysis.shp")
-urbanblockss_df <-
-  st_drop_geometry(urbanblocks)
-write_csv(urbanmunis_df, "Urban Census Block L2 Charger Hotspot Analysis.csv")
+#write_sf(urbanblocks_clean, "Urban Census Block L2 Charger Hotspot Analysis.shp")
+#urbanblocks_df <-
+  #st_drop_geometry(urbanblocks_clean)
+#write_csv(urbanblocks_df, "Urban Census Block L2 Charger Hotspot Analysis.csv")
 
 #MUD percentage for housing data, also compare gas stations
 #-----------------------------------------#

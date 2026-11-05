@@ -7,15 +7,15 @@ editor: visual
 
 ## Abstract
 
-summary, main findings
+*New Jersey's transportation sector accounts for 39% of the State's net greenhouse gas emissions, making it the largest emissions sector in the State and a critical climate policy issue. Transportation electrification has been a focus of recent New Jersey legislation which includes EV charging infrastructure development to facilitate EV adoption. This study identifies DCFC charging gaps in rural areas of New Jersey and L2 and DCFC charging gaps in urban areas of New Jersey to help policymakers, utilities, and the private sector to design and effectuate EV charging incentives.*
 
 ## Introduction and Background
 
-As of 2021, New Jersey's transportation sector accounts for 37.3% of the State's greenhouse gas ("GHG") emissions, making it the largest emissions sector in the State and a critical climate policy issue (NJDEP, 2024). Electric vehicles ("EVs") emit less GHG emissions than a conventional internal combustion engine vehicle, making them a great alternative for mitigating GHG emissions (Alternative Fuels Data Center, n.d.) Transportation electrification has been a focus of recent New Jersey Legislation such as The Electric Vehicle Act of 2020 (2019) which directed the Board of Public Utilities to advance the adoption of EVs and development of EV charging infrastructure. EVs and EV chargers can also serve as grid assets: by employing managed charging and integrating them as an energy source/storage, EVs can abate utility costs and improve grid resilience by reducing load demand and stress (evenergy, 2025).
+As of 2022, New Jersey's transportation sector accounts for 39% of the State's net greenhouse gas ("GHG") emissions, making it the largest emissions sector in the State and a critical climate policy issue (NJDEP, 2025). Electric vehicles ("EVs") emit less GHG emissions than a conventional internal combustion engine vehicle, making them a great alternative for mitigating GHG emissions (Alternative Fuels Data Center, n.d.) Transportation electrification has been a focus of recent New Jersey legislation such as The Electric Vehicle Act of 2020 (2019) which directed the Board of Public Utilities to advance the adoption of EVs and development of EV charging infrastructure. EVs and EV chargers can also serve as grid assets: by employing managed charging and integrating them as an energy source/storage, EVs can abate utility costs and improve grid resilience by reducing load demand and stress (evenergy, 2025).
 
 To facilitate EV adoption and meet State goals of 2 million EVs on the road by 2030, the State requires a robust charging network. Having a scaled public charging network in particular, fills gaps of other charging options (i.e. residents without access to residential chargers) and reduced range anxiety, further building consumer confidence in EVs (National Renewable Energy Laboratory, 2023). This public network is estimated to need 76,479 Level 2 ("L2") charger ports and 3,918 Direct Current Fast Charger ("DCFC") ports by 2030 (National Laboratory of the Rockies, n.d.) As of November 5, 2026, New Jersey has 4,451 L2 ports and 2,074 DCFC ports, meaning the private sector has been able to meet about 52.9% of the DCFC charger demand but only 5.8% of the L2 charger demand (EValuate, 2026). This leaves a major gap to be filled.
 
-Identifying where EV charger gaps exist will inform EV charging policy and boost EV adoption. This study identifies DCFC charging gaps in rural areas of New Jersey and L2 and DCFC charging gaps in urban areas of New Jersey. Current charger geographic distribution is exhibited in Figures 1-3. Rural areas are anticipated to mainly utilize residential chargers and DCFCs rather than L2s, whereas urban areas will require a robust network of L2s along with DCFC. This study will help identify what locations could benefit the most from EV charger incentives.
+Identifying where EV charger gaps exist will inform EV charging policy and boost EV adoption. This study identifies DCFC charging gaps in rural areas of New Jersey and L2 and DCFC charging gaps in urban areas of New Jersey. Current charger geographic distribution is exhibited in *Figures 1-3*. Rural areas are anticipated to mainly utilize residential chargers and DCFCs rather than L2s, whereas urban areas will require a robust network of L2s along with DCFC. This study will help identify what locations could benefit the most from EV charger incentives.
 
 ```{r}
 #| echo: false
@@ -25,7 +25,7 @@ library(sf)
 library(tigris) #for NJ boundaries
 
 #Loading data
-ev_stations <- read.csv("alt_fuel_stations (Aug 26 2026).csv") #can get a more updated version for final analysis
+ev_stations <- read.csv("alt_fuel_stations (Nov 5 2026).csv") #can get a more updated version for final analysis
 census_urban_areas <- st_read("USA_Census_Urban_Areas.shp")
 
 # Get the official New Jersey county boundary outlines to clip urban areas
@@ -168,15 +168,15 @@ For rural DCFC gap identification, there are two parameters:
 
 2.  Population-based gaps: Rural municipalities with a population of at least 5,000 where there are no DCFC chargers within 15 miles.
 
-For urban L2 gap identification, a Local Moran's I hotspot analysis was conducted on a census block level. For urban DCFC gap identification, a Local Moran's I hotspot analysis was conducted on a municipaltiy level. Local Moran's I hotspot analysis identifies hotspots or coldspots which are regions with significantly more or less EV chargers than its neighbors–with a 90% confidence level in this study. High-low outliers are census blocks/municipalities with a high amount of EV chargers but surrounded by census blocks/municipalities with a low amount of EV chargers. Low-high outliers are census blocks/municipalities with a low amount of EV chargers but surrounded by census blocks/municipalities with a high amount of EV chargers.
+For urban DCFC gap identification, a Local Moran's I hotspot analysis was conducted on a municipaltiy level. For urban L2 gap identification, a Local Moran's I hotspot analysis was conducted on a census block level. Local Moran's I hotspot analysis identifies hotspots or coldspots which are regions with significantly more or less EV chargers than its neighbors–with a 90% confidence level in this study. High-low outliers are census blocks/municipalities with a high amount of EV chargers but surrounded by census blocks/municipalities with a low amount of EV chargers. Low-high outliers are census blocks/municipalities with a low amount of EV chargers but surrounded by census blocks/municipalities with a high amount of EV chargers.
 
 ### Data
 
-EV charging stations were used from the Alternative Fuels Data Center Electric Vehicle Charging Station Locations tool and accessed \[DATE\]. USA Census Urban Areas (2020) was accessed from the United States Census Bureau. Major corridors (Primary and Secondary Roads) and New Jersey census blocks were accessed from the United States Census Bureau's 2026 TIGER/Line Shapefiles. New Jersey municipalities were accessed from the New Jersey Office of GIS's Municipal Boundaries of NJ, Hosted, 3857 (2025).
+EV charging stations were used from the Alternative Fuels Data Center Electric Vehicle Charging Station Locations tool and accessed November 5, 2026. USA Census Urban Areas (2020), major corridors (Primary and Secondary Roads), and New Jersey census blocks were accessed from the United States Census Bureau's 2026 TIGER/Line Shapefiles. New Jersey municipalities were accessed from the New Jersey Office of GIS's Municipal Boundaries of NJ, Hosted, 3857 (2025).
 
 ## Results
 
-maps, interpretation
+The rural gap identification analysis finds that there are **only two** rural municipalities that meet the criteria of being within a corridor- or population-based DCFC gap (*Figure 4*). This finding suggests that rural areas in New Jersey do not suffer from a large DCFC gap which would inhibit EV adoption and EV chargers in rural areas need not be overincentivised.
 
 ```{r}
 #| echo: false
@@ -259,15 +259,19 @@ ggplot() +
   ) + 
   theme_minimal() + 
   labs(
-    title = "Rural Municipality DCFC Gaps", 
+    title = "Figure 4: Rural Municipality DCFC Gaps", 
     fill = "Gap Type"
   )
 ```
 
+A preliminary chloropleth map of urban DCFCs (*Figure 5*) shows that high DCFC concentration is aligning with New Jersey population hubs which serves the goal of providing charger access to where it is needed. The preliminary chloropleth map of urban L2 chargers (*Figure 7*) supports evidence that there is a major gap in L2 chargers across the State's urban areas with several census block outliers.
+
+The urban DCFC hotspot analysis finds that there are **\[several\]** high-low outlier census blocks, as well as a **\[few\]** low-high outliers (*Figure 6*). The latter implies that these are priority gaps to be filled but further research is needed to verify if there is a need in that location.
+
 ```{r}
 #| echo: false
 #HOTSPOT ANALYSIS for urban areas
-library(spdep) 
+library(spdep)
 #Count chargers by municipality for DCFC
 urbanmunis <- st_read("Urban Municipalities.shp")
 urbanmunis <- st_transform(urbanmunis, 3857)
@@ -291,7 +295,7 @@ ggplot()+
     breaks = c(0, 1, 2, 3, 4, 5, 10, 15)
     ) +
   theme_void() + 
-  labs(title = "Urban DCFC Chargers by Municipality")
+  labs(title = "Figure 5: Urban DCFC Chargers by Municipality")
 
 #Create neighbor list and weights 
 coords <- st_coordinates(st_point_on_surface(urbanmunis))
@@ -337,8 +341,10 @@ ggplot()+
     drop = FALSE
   ) +
   theme_minimal() + 
-  labs(title = "Urban DCFC Hot Spot Analysis by Municipality (LISA)", fill = "Cluster Type")
+  labs(title = "Figure 6: Urban DCFC Hot Spot Analysis by Municipality (LISA)", fill = "Cluster Type")
 ```
+
+The urban L2 hotspot analysis finds that there are **\[\]** high-low outlier census blocks (*Figure 8*). This confirms there is a great need for L2 charger development across the State to meet EV adoption needs.
 
 ```{r}
 #| echo: false
@@ -373,7 +379,7 @@ ggplot()+
     breaks = c(0, 1, 2, 3, 4, 5, 25)
   )
 theme_void() + 
-  labs(title = "Urban L2 Chargers by Census Block")
+  labs(title = "Figure 7: Urban L2 Chargers by Census Block")
 
 #Create neighbor list and weights 
 urbanblocks_clean <- urbanblocks[!st_is_empty(urbanblocks), ]
@@ -418,11 +424,112 @@ ggplot()+
     drop = FALSE
   ) +
   theme_minimal() + 
-  labs(title = "Urban L2 Hot Spot Analysis by Census Block (LISA)", fill = "Cluster Type")
+  labs(title = "Figure 8: Urban L2 Hot Spot Analysis by Census Block (LISA)", fill = "Cluster Type")
 ```
 
 ## Recommendations
 
-Really focus on just rural dcfc in a few areas Urban dcfc not a problem and already almost halfway to goals, not incentives needed Urban L2 on the other hand is a big gap that needs focus
+The main EV charging gaps in New Jersey are rural DCFC and urban L2 charger build-out. Soltanpour et al. (2025) found that doubling EV charging investment in L2 chargers and DCFCs reduces unserved EVs by 61%. This study can help policymakers narrow down where DCFC incentives should be prioritized in rural locations. In addition, this study confirms the need for L2 charger build-out across the state.
+
+The New York State Energy Research and Development Authority and Transportation and Climate Initiative propose that siting accessible EV chargers includes factors such as visibility, length of stay, proximity to building entrances, pedestrian and vehicle traffic, parking and weather conditions, and more (WXY Architecture + Urban Design, 2012). State incentives for urban L2 chargers should consider establishment concentrations (*Appendix A*) and walkability (e.g. USEPA's National Walkability Index, 2026) to determine optimal locations for L2 utilization on a local level. In places with an abundance of establishments, EV owners may be able to park and charge their car within walking distance while they work, run errands, see sites, etc. Siting of EV chargers is critical in the initial adoption phase of EVs as slow uptake can incur significant demand charges which impact both the consumer and the utility (Muratori et al., 2019).
+
+Overall, access to a robust DCFC and L2 charger network quells concerns about EV range and convenience for New Jersey residents driving long distances and those lacking residential charging, building confidence in EV adoption.
+
+## Appendix A
+
+```{r}
+#Read data for number of establishments by zip code
+business <- read.csv("CBP2023.CB2300CBP-2026-10-22T140912.csv")
+business <- business %>%
+  mutate(
+    num_est = as.numeric(str_remove_all(Number.of.establishments, ",")),
+    zip_clean = str_extract(Geographic.Area.Name, "\\d{5}")
+  ) %>%
+  filter(!is.na(zip_clean), !is.na(num_est)) %>%
+  group_by(zip_clean) %>%
+  summarize(total_est = sum(num_est, na.rm = TRUE), .groups = "drop")
+
+nj_zips <- zctas(state = "NJ", year = 2010) %>%
+  mutate(ZCTA5CE10 = trimws(as.character(ZCTA5CE10)))
+nj_zips <- nj_zips %>%
+  left_join(business, by = c("ZCTA5CE10" = "zip_clean"))
+
+nj_zips$total_est <- as.numeric(as.character(nj_zips$total_est))
+nj_zips$total_est[is.na(nj_zips$total_est)] <- 0
+
+nj_zips <- nj_zips %>%
+  mutate(total_est = coalesce(total_est, 0)) #for any unmatched ZIPs
+nj_zips <- nj_zips[!st_is_empty(nj_zips), ] #removing empty geometries
+nj_zips <- nj_zips[!is.na(st_dimension(nj_zips)), ]
+
+
+#Hot spot analysis 
+#Create neighbor list and weights 
+
+coords <- st_coordinates(st_centroid(nj_zips))
+knn <- knearneigh(coords, k = 6)
+nb <- knn2nb(knn)
+#nb <- poly2nb(nj_zips)
+lw <- nb2listw(nb, style = "W")
+
+#Getis-Ord GI* Method to compute hot spots statistics
+#quick fix making NAs 0s
+gi_results <- localG(nj_zips$total_est, lw) 
+nj_zips$GiZScore <- as.numeric(gi_results) #add Gi Z score to data
+
+#Classification
+nj_zips <- nj_zips %>%
+  mutate(GiCategory = case_when(GiZScore >= 1.645 ~ "Hotspot (90% confidence)", GiZScore >= 1.96 ~ "Hotspot (95% confidence)",
+                                GiZScore <= -1.645 ~ "Coldspot (90% confidence)", GiZScore <= -1.96 ~ "Coldspot (95% confidence)",
+                                TRUE ~ "Not significant" ))
+
+nj <- states(cb = TRUE) |>
+  filter(STUSPS == "NJ")
+st_transform(nj, st_crs(nj_zips))
+ggplot()+
+  #geom_sf(data = nj, fill = "white", color = "black", linewidth = 0.5) +
+  geom_sf(data = nj_zips, aes(fill = GiCategory), color = "white", size = 0.1) +
+  scale_fill_manual(
+    values = c(
+      "Hotspot (90% confidence)" = "red", 
+      "Hotspot (95% confidence)" = "red4", 
+      "Coldspot (90% confidence" = "blue", 
+      "Coldspot (95% confidence" = "blue4", 
+      "Not significant" = "grey80"
+    )
+  ) +
+  theme_minimal() + 
+  labs(title = "NJ Establishment Hotspot Analysis", fill = "Gi Classification")
+```
 
 ## References
+
+Alternative Fuels Data Center. (n.d.) *Station Locator.* Retrieved November 5, 2026, from <https://afdc.energy.gov/stations#/find/nearest?fuel=ELEC>
+
+Alternative Fuels Data Center. (n.d.) *Emissions from Electric Vehicles.* Retrieved November 5, 2026, from <https://afdc.energy.gov/vehicles/electric-emissions>
+
+Atlas Public Policy. (n.d.) *EValuateNJ.* Retrieved November 5, 2026, from <https://atlaspolicy.com/evaluatenj/>
+
+Electric Vehicle Act of 2020 ("EV Act"), N.J.S.A. § 48:25-1 et seq. (2020).
+
+evenergy. (2025). *The Utility Playbook: Turning EV Grid Risk into a \$30 Billion Opportunity.* <https://platform.ev.energy/resources/value-of-managed-charging>
+
+Muratori, M., Kontou, E., & Eichman, J. (2019). Electricity Rates for Electric Vehicle Direct Current Fast Charging in the United States, *Renewable and Sustainable Energy Reviews, 113.* <https://www.osti.gov/pages/servlets/purl/1543251>
+
+National Laboratory of the Rockies. (n.d.) EVI-X: Electric Vehicle Infrastructure Toolbox. Retrieved November 5, 2026, from <https://afdc.energy.gov/evi-x-toolbox#/evi-pro-ports>
+
+National Renewable Energy Laboratory. (2023). *The 2030 National Charging Network: Estimating U.S. Light-Duty Demand for Electric Vehicle Charging Infrastructure.* <https://afdc.energy.gov/files/u/publication/2030-charging-network.pdf>
+
+New Jersey Department of Environmental Protection. (April 2025). *New Jersey Greenhouse Gas: 2025 Mid-Cycle Update Report.* <https://dep.nj.gov/wp-content/uploads/ghg/ghg-inventory-mcu-2025-1.pdf>
+
+New Jersey Office of GIS. (10 April 2025). *Municipal Boundaries of NJ, Hosted, 3857*. Retrieved October 14, 2026, from <https://njogis-newjersey.opendata.arcgis.com/datasets/newjersey::municipal-boundaries-of-nj-hosted-3857>
+
+Soltanpour, A., Rostami, A., Ghafarnezhad, B., Ghamami, M., & Zockaie, A. (2025). Strategic deployment of Level-2 charging infrastructure at long-distance trip endpoints integrated with fast charging network to enhance EV tourism, *Sustainable Cities and Society, 130.* [10.1016/j.scs.2025.106516](https://www.sciencedirect.com/science/article/abs/pii/S2210670725003919)
+
+United Census Bureau. (2023). *CB2300CBPAll Sectors: County Business Patterns, including ZIP Code Business Patterns, by Legal Form of Organization and Employment Size Class for the U.S., States, and Selected Geographies: 2023.* <https://data.census.gov/table/CBP2023.CB2300CBP>
+
+United States Census Bureau. (n.d.) TIGER/Line® Shapefiles. Retrieved October 14, 2026, from <https://www.census.gov/cgi-bin/geo/shapefiles/index.php>
+
+United States Environmental Protection Agency. (8 January 2026). *National Walkability Index User Guide and Methodology.* <https://www.epa.gov/smartgrowth/national-walkability-index-user-guide-and-methodology>
+
+WXY Architecture + Urban Design. (November 2012). *Siting and Design Guidelines for Electric Vehicle Supply Equipment.* New York State Energy Research and Development Authority and Transportation and Climate Initiative. <https://www.transportationandclimate.org/sites/default/files/EV_Siting_and_Design_Guidelines.pdf>

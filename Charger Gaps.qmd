@@ -25,7 +25,7 @@ library(sf)
 library(tigris) #for NJ boundaries
 
 #Loading data
-ev_stations <- read.csv("alt_fuel_stations (Nov 5 2026).csv") #can get a more updated version for final analysis
+ev_stations <- read.csv("alt_fuel_stations (Aug 26 2026).csv") #can get a more updated version for final analysis
 census_urban_areas <- st_read("USA_Census_Urban_Areas.shp")
 
 # Get the official New Jersey county boundary outlines to clip urban areas
@@ -67,6 +67,7 @@ ruralmunis <- ruralmunis |>
     .groups = "drop"
   )
 
+
 #Classify chargers and link to rural/urban areas
 ev_stations <- ev_stations |>
   filter(EV_Level2_EVSE_Num > 0 | EV_DC_Fast_Count > 0) |>
@@ -93,6 +94,23 @@ chargers_sf <- st_as_sf(ev_stations, coords = c("Longitude", "Latitude"), crs=43
 chargers_sf <- st_transform(chargers_sf, 32111)
 chargers <- st_join(chargers_sf, urban_rural)
 
+#Plot urban and rural areas map
+ggplot()+
+  #geom_sf(data = nj, aes(fill = NA), color = "black") +
+  geom_sf(data = rural_geom, aes(fill = "Rural"), color = NA) +
+  geom_sf(data = urban_union, aes(fill = "Urban"), color = NA) +
+  scale_fill_manual(
+    values = c("Urban" = "grey60", "Rural" = "lightgreen"),
+    name = "Area Type"
+  ) + 
+  #geom_sf(data = chargers_sf, aes(color = level), size = 1) +
+  #scale_color_manual(
+  #values = c("L2" = "deepskyblue", "DCFC" = "darkorchid"),
+  #name = "Charger Level"
+  #) +
+  labs(title = "New Jersey EV Chargers in Urban and Rural Areas") +
+  theme_minimal()
+
 #Now separate maps for Rural L2 and DCFC chargers, and Urban L2, Urban DCFC
 onlyrural <- chargers[chargers$urban_rural == "rural", c("level", "urban_rural")]
 
@@ -112,7 +130,7 @@ ggplot()+
     values = c("L2" = "yellow", "DCFC" = "darkorchid"),
     name = "Charger Level"
   ) +
-  labs(title = "Figure 1: New Jersey Rural Chargers") +
+  labs(title = "New Jersey Rural Chargers") +
   theme_minimal()
 ```
 
@@ -172,11 +190,11 @@ For urban DCFC gap identification, a Local Moran's I hotspot analysis was conduc
 
 ### Data
 
-EV charging stations were used from the Alternative Fuels Data Center Electric Vehicle Charging Station Locations tool and accessed November 5, 2026. USA Census Urban Areas (2020), major corridors (Primary and Secondary Roads), and New Jersey census blocks were accessed from the United States Census Bureau's 2026 TIGER/Line Shapefiles. New Jersey municipalities were accessed from the New Jersey Office of GIS's Municipal Boundaries of NJ, Hosted, 3857 (2025).
+EV charging stations were used from the Alternative Fuels Data Center Electric Vehicle Charging Station Locations tool and accessed August 26, 2026. USA Census Urban Areas (2020), major corridors (Primary and Secondary Roads), and New Jersey census blocks were accessed from the United States Census Bureau's 2026 TIGER/Line Shapefiles. New Jersey municipalities were accessed from the New Jersey Office of GIS's Municipal Boundaries of NJ, Hosted, 3857 (2025).
 
 ## Results
 
-The rural gap identification analysis finds that there are **only two** rural municipalities that meet the criteria of being within a corridor- or population-based DCFC gap (*Figure 4*). This finding suggests that rural areas in New Jersey do not suffer from a large DCFC gap which would inhibit EV adoption and EV chargers in rural areas need not be overincentivised.
+The rural gap identification analysis finds that there are only two rural municipalities that meet the criteria of being within a corridor-based DCFC gap: Shiloh and Stow Creek (*Figure 4*). This finding suggests that rural areas in New Jersey do not suffer from a large DCFC gap which would inhibit EV adoption and EV chargers in rural areas need not be overincentivised.
 
 ```{r}
 #| echo: false
@@ -266,7 +284,7 @@ ggplot() +
 
 A preliminary chloropleth map of urban DCFCs (*Figure 5*) shows that high DCFC concentration is aligning with New Jersey population hubs which serves the goal of providing charger access to where it is needed. The preliminary chloropleth map of urban L2 chargers (*Figure 7*) supports evidence that there is a major gap in L2 chargers across the State's urban areas with several census block outliers.
 
-The urban DCFC hotspot analysis finds that there are **\[several\]** high-low outlier census blocks, as well as a **\[few\]** low-high outliers (*Figure 6*). The latter implies that these are priority gaps to be filled but further research is needed to verify if there is a need in that location.
+The urban DCFC hotspot analysis finds that there are fourteen high-low outlier census blocks (Howell, Ewing, Plainsboro, Elizabeth, Kearny, Rutherford, Waldwick, Allendale, Hillside, Newark, Jersey City, Absecon, Harrison, and Secaucus), as well as one low-high outlier: Northvale (*Figure 6*). The latter implies a potential gap to be filled but further research is necessary to verify if there is a need in that location.
 
 ```{r}
 #| echo: false
@@ -431,13 +449,14 @@ ggplot()+
 
 The main EV charging gaps in New Jersey are rural DCFC and urban L2 charger build-out. Soltanpour et al. (2025) found that doubling EV charging investment in L2 chargers and DCFCs reduces unserved EVs by 61%. This study can help policymakers narrow down where DCFC incentives should be prioritized in rural locations. In addition, this study confirms the need for L2 charger build-out across the state.
 
-The New York State Energy Research and Development Authority and Transportation and Climate Initiative propose that siting accessible EV chargers includes factors such as visibility, length of stay, proximity to building entrances, pedestrian and vehicle traffic, parking and weather conditions, and more (WXY Architecture + Urban Design, 2012). State incentives for urban L2 chargers should consider establishment concentrations (*Appendix A*) and walkability (e.g. USEPA's National Walkability Index, 2026) to determine optimal locations for L2 utilization on a local level. In places with an abundance of establishments, EV owners may be able to park and charge their car within walking distance while they work, run errands, see sites, etc. Siting of EV chargers is critical in the initial adoption phase of EVs as slow uptake can incur significant demand charges which impact both the consumer and the utility (Muratori et al., 2019).
+The New York State Energy Research and Development Authority and Transportation and Climate Initiative propose that siting accessible EV chargers includes factors such as visibility, length of stay, proximity to building entrances, pedestrian and vehicle traffic, parking and weather conditions, and more (WXY Architecture + Urban Design, 2012). State incentives for urban L2 chargers should consider establishment concentrations (*Appendix A*) and walkability (e.g. USEPA's National Walkability Index, 2026) to determine optimal locations for L2 utilization on a local level. In places with an abundance of establishments, EV owners may be able to park and charge their car within walking distance while they work, run errands, see sites, etc. Siting of EV chargers to optimize utilizaation is critical in the initial adoption phase of EVs as slow uptake can incur significant demand charges which impact both the consumer and the utility (Muratori et al., 2019).
 
 Overall, access to a robust DCFC and L2 charger network quells concerns about EV range and convenience for New Jersey residents driving long distances and those lacking residential charging, building confidence in EV adoption.
 
 ## Appendix A
 
 ```{r}
+#| echo: false
 #Read data for number of establishments by zip code
 business <- read.csv("CBP2023.CB2300CBP-2026-10-22T140912.csv")
 business <- business %>%
@@ -504,7 +523,7 @@ ggplot()+
 
 ## References
 
-Alternative Fuels Data Center. (n.d.) *Station Locator.* Retrieved November 5, 2026, from <https://afdc.energy.gov/stations#/find/nearest?fuel=ELEC>
+Alternative Fuels Data Center. (n.d.) *Station Locator.* Retrieved August 26, 2026, from <https://afdc.energy.gov/stations#/find/nearest?fuel=ELEC>
 
 Alternative Fuels Data Center. (n.d.) *Emissions from Electric Vehicles.* Retrieved November 5, 2026, from <https://afdc.energy.gov/vehicles/electric-emissions>
 

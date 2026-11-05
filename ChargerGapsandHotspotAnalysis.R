@@ -109,11 +109,7 @@ ggplot()+
     name = "DCFC Charger Count", 
     colors = my_colors,
     values = rescale(my_breaks, to = c(0, 1), from = c(0, 15)),
-    breaks = c(0, 1, 2, 3, 4, 5, 10, 15),
-    #low = "white", 
-    #mid = "lavender", 
-    #high = "purple", 
-    #midpoint = mean(urbanmunis$charger_count, na.rm = TRUE)
+    breaks = c(0, 1, 2, 3, 4, 5, 10, 15)
     ) +
   theme_void() + 
   labs(title = "Urban DCFC Chargers by Municipality")
@@ -201,11 +197,7 @@ ggplot()+
     name = "L2 Charger Count", 
       colors = my_colors,
       values = rescale(my_breaks, to = c(0, 1), from = c(0, 25)),
-      breaks = c(0, 1, 2, 3, 4, 5, 25),
-    #low = "white", 
-    #mid = "lavender", 
-    #high = "purple", 
-    #midpoint = mean(urbanblocks$n_L2, na.rm = TRUE)) +
+      breaks = c(0, 1, 2, 3, 4, 5, 25)
   )
   theme_void() + 
   labs(title = "Urban L2 Chargers by Census Block")

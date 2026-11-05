@@ -44,8 +44,8 @@ nj_zips$GiZScore <- as.numeric(gi_results) #add Gi Z score to data
 
 #Classification
 nj_zips <- nj_zips %>%
-  mutate(GiCategory = case_when(GiZScore >= 2.58 ~ "Hotspot (99% confidence)", GiZScore >= 1.96 ~ "Hotspot (95% confidence)",
-                                GiZScore <= -2.58 ~ "Coldspot (99% confidence)", GiZScore <= -1.96 ~ "Coldspot (95% confidence)",
+  mutate(GiCategory = case_when(GiZScore >= 1.645 ~ "Hotspot (90% confidence)", GiZScore >= 1.96 ~ "Hotspot (95% confidence)",
+                                GiZScore <= -1.645 ~ "Coldspot (90% confidence)", GiZScore <= -1.96 ~ "Coldspot (95% confidence)",
                                 TRUE ~ "Not significant" ))
 st_write(nj_zips, "NJ ZIP Workplace Hotspot Analysis.shp")
 nj_zips_no_geom <- st_drop_geometry(nj_zips)
@@ -59,10 +59,10 @@ ggplot()+
   geom_sf(data = nj_zips, aes(fill = GiCategory), color = "white", size = 0.1) +
   scale_fill_manual(
     values = c(
-      "Hotspot (99% confidence)" = "red4", 
-      "Hotspot (95% confidence)" = "red", 
-      "Coldspot (99% confidence" = "blue4", 
-      "Coldspot (95% confidence" = "blue", 
+      "Hotspot (90% confidence)" = "red", 
+      "Hotspot (95% confidence)" = "red4", 
+      "Coldspot (90% confidence" = "blue", 
+      "Coldspot (95% confidence" = "blue4", 
       "Not significant" = "grey80"
     )
   ) +

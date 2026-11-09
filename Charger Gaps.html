@@ -86,22 +86,6 @@ ul.task-list li input[type="checkbox"] {
 <p>To facilitate EV adoption and meet State goals of 2 million EVs on the road by 2030, the State requires a robust charging network. Having a scaled public charging network in particular, fills gaps of other charging options (i.e.&nbsp;residents without access to residential chargers) and reduced range anxiety, further building consumer confidence in EVs (National Renewable Energy Laboratory, 2023). This public network is estimated to need 76,479 Level 2 (“L2”) charger ports and 3,918 Direct Current Fast Charger (“DCFC”) ports by 2030 (National Laboratory of the Rockies, n.d.) As of November 5, 2026, New Jersey has 4,451 L2 ports and 2,074 DCFC ports, meaning the private sector has been able to meet about 52.9% of the DCFC charger demand but only 5.8% of the L2 charger demand (EValuate, 2026). This leaves a major gap to be filled.</p>
 <p>Identifying where EV charger gaps exist will inform EV charging policy and boost EV adoption. This study identifies DCFC charging gaps in rural areas of New Jersey and L2 and DCFC charging gaps in urban areas of New Jersey. Current charger geographic distribution is exhibited in <em>Figures 1-3</em>. Rural areas are anticipated to mainly utilize residential chargers and DCFCs rather than L2s, whereas urban areas will require a robust network of L2s along with DCFC. This study will help identify what locations could benefit the most from EV charger incentives.</p>
 <div class="cell">
-<div class="cell-output cell-output-stderr">
-<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-✔ dplyr     1.2.1     ✔ readr     2.2.0
-✔ forcats   1.0.1     ✔ stringr   1.6.0
-✔ ggplot2   4.0.3     ✔ tibble    3.3.1
-✔ lubridate 1.9.5     ✔ tidyr     1.3.2
-✔ purrr     1.2.2     
-── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-✖ dplyr::filter() masks stats::filter()
-✖ dplyr::lag()    masks stats::lag()
-ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors
-Linking to GEOS 3.14.1, GDAL 3.12.1, PROJ 9.7.1; sf_use_s2() is TRUE
-
-To enable caching of data, set `options(tigris_use_cache = TRUE)`
-in your R script or .Rprofile.</code></pre>
-</div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Reading layer `USA_Census_Urban_Areas' from data source 
   `C:\Users\hadia\OneDrive\Documents (from rutgers onedrive)\njevchargerclusters\USA_Census_Urban_Areas.shp' 
@@ -112,13 +96,6 @@ Dimension:     XY
 Bounding box:  xmin: -170.7893 ymin: -14.36542 xmax: 145.7916 ymax: 64.92889
 Geodetic CRS:  NAD83</code></pre>
 </div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Retrieving data for the year 2024</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: attribute variables are assumed to be spatially constant throughout
-all geometries</code></pre>
-</div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Reading layer `NJ_Municipalities_3857' from data source 
   `C:\Users\hadia\OneDrive\Documents (from rutgers onedrive)\njevchargerclusters\NJ_Municipalities_3857.shp' 
@@ -128,14 +105,6 @@ Geometry type: MULTIPOLYGON
 Dimension:     XY
 Bounding box:  xmin: -8411253 ymin: 4711438 xmax: -8226783 ymax: 5065240
 Projected CRS: WGS 84 / Pseudo-Mercator</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: attribute variables are assumed to be spatially constant throughout
-all geometries</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning in st_collection_extract.sf(st_make_valid(urban_rural), "POLYGON"): x
-is already of type POLYGON.</code></pre>
 </div>
 <div class="cell-output-display">
 <div>
@@ -168,10 +137,6 @@ is already of type POLYGON.</code></pre>
 <p><img src="Charger-Gaps_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: attribute variables are assumed to be spatially constant throughout
-all geometries</code></pre>
 </div>
 </div>
 </section>
@@ -226,9 +191,6 @@ Geometry type: POINT
 Dimension:     XY
 Bounding box:  xmin: 61244.57 ymin: 10930.67 xmax: 197814 ymax: 275428.3
 Projected CRS: NAD83 / New Jersey</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>lines or polygons</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -515,9 +477,6 @@ Projected CRS: NAD83 / New Jersey</code></pre>
   |                                                                            
   |======================================================================| 100%</code></pre>
 </div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Retrieving data for the year 2024</code></pre>
-</div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -529,14 +488,6 @@ Projected CRS: NAD83 / New Jersey</code></pre>
 <p>A preliminary chloropleth map of urban DCFCs (<em>Figure 5</em>) shows that high DCFC concentration is aligning with New Jersey population hubs which serves the goal of providing charger access to where it is needed. The preliminary chloropleth map of urban L2 chargers (<em>Figure 7</em>) supports evidence that there is a major gap in L2 chargers across the State’s urban areas with several census block outliers.</p>
 <p>The urban DCFC hotspot analysis finds that there are fourteen high-low outlier census blocks (Howell, Ewing, Plainsboro, Elizabeth, Kearny, Rutherford, Waldwick, Allendale, Hillside, Newark, Jersey City, Absecon, Harrison, and Secaucus), as well as one low-high outlier: Northvale (<em>Figure 6</em>). The latter implies a potential gap to be filled but further research is necessary to verify if there is a need in that location.</p>
 <div class="cell">
-<div class="cell-output cell-output-stderr">
-<pre><code>Loading required package: spData</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>To access larger datasets in this package, install the spDataLarge
-package with: `install.packages('spDataLarge',
-repos='https://nowosad.github.io/drat/', type='source')`</code></pre>
-</div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Reading layer `Urban Municipalities' from data source 
   `C:\Users\hadia\OneDrive\Documents (from rutgers onedrive)\njevchargerclusters\Urban Municipalities.shp' 
@@ -547,36 +498,12 @@ Dimension:     XY
 Bounding box:  xmin: 60116.6 ymin: 10737.02 xmax: 200270.4 ymax: 280253.2
 Projected CRS: NAD83 / New Jersey</code></pre>
 </div>
-<div class="cell-output cell-output-stderr">
-<pre><code>
-Attaching package: 'scales'</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>The following object is masked from 'package:purrr':
-
-    discard</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>The following object is masked from 'package:readr':
-
-    col_factor</code></pre>
-</div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
 <p><img src="Charger-Gaps_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: st_point_on_surface assumes attributes are constant over geometries</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning in dnearneigh(coords, d1 = 0, d2 = 16093.4): neighbour object has 5
-sub-graphs</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Retrieving data for the year 2024</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Simple feature collection with 1 feature and 9 fields
@@ -618,10 +545,6 @@ Geometry type: MULTIPOLYGON
 Dimension:     XY
 Bounding box:  xmin: -170.7893 ymin: -14.36542 xmax: 145.7916 ymax: 64.92889
 Geodetic CRS:  NAD83</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: attribute variables are assumed to be spatially constant throughout
-all geometries</code></pre>
 </div>
 <div class="cell-output-display">
 <div>
@@ -798,12 +721,6 @@ all geometries</code></pre>
  @ complete: logi TRUE
  @ validate: logi TRUE</code></pre>
 </div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: st_point_on_surface assumes attributes are constant over geometries</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Retrieving data for the year 2024</code></pre>
-</div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -822,12 +739,6 @@ all geometries</code></pre>
 <section id="appendix-a" class="level2">
 <h2 class="anchored" data-anchor-id="appendix-a">Appendix A</h2>
 <div class="cell">
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: st_centroid assumes attributes are constant over geometries</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Retrieving data for the year 2024</code></pre>
-</div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Simple feature collection with 1 feature and 9 fields
 Geometry type: MULTIPOLYGON

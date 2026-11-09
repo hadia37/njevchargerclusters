@@ -1,8 +1,12 @@
 ---
 title: "EV Charger Gaps in New Jersey"
 author: "Hadia Khan"
-format: html
+format: pdf
 editor: visual
+execute:
+    echo: false
+    warning: false
+    message: false
 ---
 
 ## Abstract
@@ -19,6 +23,8 @@ Identifying where EV charger gaps exist will inform EV charging policy and boost
 
 ```{r}
 #| echo: false
+#| warning: false
+#| message: false
 #Loading packages
 library(tidyverse) #includes ggplot2
 library(sf)
@@ -136,6 +142,8 @@ ggplot()+
 
 ```{r}
 #| echo: false
+#| warning: false
+#| message: false
 #Urban L2 chargers
 ggplot()+
   geom_sf(data = rural_geom, aes(fill = "Rural"), color = NA) +
@@ -151,6 +159,8 @@ ggplot()+
 
 ```{r}
 #| echo: false
+#| warning: false
+#| message: false
 #Urban DCFC chargers 
 ggplot()+
   geom_sf(data = rural_geom, aes(fill = "Rural"), color = NA) +
@@ -198,6 +208,8 @@ The rural gap identification analysis finds that there are only two rural munici
 
 ```{r}
 #| echo: false
+#| warning: false
+#| message: false
 #Loading packages and data
 library(tidyverse)
 library(sf)
@@ -288,6 +300,8 @@ The urban DCFC hotspot analysis finds that there are fourteen high-low outlier c
 
 ```{r}
 #| echo: false
+#| warning: false
+#| message: false
 #HOTSPOT ANALYSIS for urban areas
 library(spdep)
 #Count chargers by municipality for DCFC
@@ -366,6 +380,8 @@ The urban L2 hotspot analysis finds that there are **\[\]** high-low outlier cen
 
 ```{r}
 #| echo: false
+#| warning: false
+#| message: false
 ##Count chargers by census blocks for L2
 L2 <- chargers%>%
   filter(level == "L2")
@@ -457,6 +473,8 @@ Overall, access to a robust DCFC and L2 charger network quells concerns about EV
 
 ```{r}
 #| echo: false
+#| warning: false
+#| message: false
 #Read data for number of establishments by zip code
 business <- read.csv("CBP2023.CB2300CBP-2026-10-22T140912.csv")
 business <- business %>%

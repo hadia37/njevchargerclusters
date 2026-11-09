@@ -1,7 +1,7 @@
 ---
 title: "EV Charger Gaps in New Jersey"
 author: "Hadia Khan"
-format: pdf
+format: html
 editor: visual
 execute:
     echo: false
@@ -99,23 +99,6 @@ urban_rural_sf <- st_as_sf(urban_rural, coords = c("Longitude", "Latitude"), crs
 chargers_sf <- st_as_sf(ev_stations, coords = c("Longitude", "Latitude"), crs=4326)
 chargers_sf <- st_transform(chargers_sf, 32111)
 chargers <- st_join(chargers_sf, urban_rural)
-
-#Plot urban and rural areas map
-ggplot()+
-  #geom_sf(data = nj, aes(fill = NA), color = "black") +
-  geom_sf(data = rural_geom, aes(fill = "Rural"), color = NA) +
-  geom_sf(data = urban_union, aes(fill = "Urban"), color = NA) +
-  scale_fill_manual(
-    values = c("Urban" = "grey60", "Rural" = "lightgreen"),
-    name = "Area Type"
-  ) + 
-  #geom_sf(data = chargers_sf, aes(color = level), size = 1) +
-  #scale_color_manual(
-  #values = c("L2" = "deepskyblue", "DCFC" = "darkorchid"),
-  #name = "Charger Level"
-  #) +
-  labs(title = "New Jersey EV Chargers in Urban and Rural Areas") +
-  theme_minimal()
 
 #Now separate maps for Rural L2 and DCFC chargers, and Urban L2, Urban DCFC
 onlyrural <- chargers[chargers$urban_rural == "rural", c("level", "urban_rural")]
